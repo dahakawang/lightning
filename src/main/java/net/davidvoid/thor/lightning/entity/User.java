@@ -31,4 +31,8 @@ public class User {
     public void setId(long id) {
         this.id = id;
     }
+
+    public boolean is_valid_id() {
+        return this.id != -1;
+    }
 }
