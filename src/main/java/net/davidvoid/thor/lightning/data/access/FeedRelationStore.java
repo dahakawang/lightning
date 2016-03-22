@@ -32,8 +32,8 @@ public class FeedRelationStore extends AbstractStore {
         FeedRelation feed = (FeedRelation) entity;
 
     	BasicDBObject object = new BasicDBObject("id", feed.getId());
-    	object.put("group_id", feed.getGroup_id());
-    	object.put("feed_id", feed.getFeed_id());
+    	object.put("group_id", feed.getGroupId());
+    	object.put("feed_id", feed.getFeedId());
     	object.put("name", feed.getName());
 
 		return object;
@@ -43,8 +43,8 @@ public class FeedRelationStore extends AbstractStore {
     protected Entity toEntity(DBObject object) {
 		FeedRelation relation = new FeedRelation();
 		relation.setId((Long)object.get("id"));
-		relation.setGroup_id((Long)object.get("group_id"));
-		relation.setFeed_id((Long)object.get("feed_id"));
+        relation.setGroupId((Long) object.get("group_id"));
+        relation.setFeedId((Long) object.get("feed_id"));
 		relation.setName((String)object.get("name"));
 		
 		return relation;
@@ -54,8 +54,8 @@ public class FeedRelationStore extends AbstractStore {
     protected DBObject getModifyQuery(Entity entity) {
         FeedRelation feed = (FeedRelation) entity;
         
-    	BasicDBObject object = new BasicDBObject("group_id", feed.getGroup_id());
-    	object.put("feed_id", feed.getFeed_id());
+    	BasicDBObject object = new BasicDBObject("group_id", feed.getGroupId());
+    	object.put("feed_id", feed.getFeedId());
         return object;
     }
 

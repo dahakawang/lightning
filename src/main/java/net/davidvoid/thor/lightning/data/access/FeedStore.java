@@ -45,7 +45,7 @@ public class FeedStore extends AbstractStore {
         Iterator<FeedRelation> it = list.iterator();
 
         while (it.hasNext()) {
-            id_list.add(it.next().getFeed_id());
+            id_list.add(it.next().getFeedId());
         }
 
         return id_list;
@@ -58,7 +58,7 @@ public class FeedStore extends AbstractStore {
         BasicDBObject object = new BasicDBObject("id", feed.getId());
         object.put("description", feed.getDescription());
         object.put("url", feed.getUrl());
-        object.put("last_update", feed.getLast_update());
+        object.put("last_update", feed.getLastUpdate());
 
         return object;
     }
@@ -69,7 +69,7 @@ public class FeedStore extends AbstractStore {
         feed.setId((Long) object.get("id"));
         feed.setDescription((String) object.get("description"));
         feed.setUrl((String) object.get("url"));
-        feed.setLast_update((Date) object.get("last_update"));
+        feed.setLastUpdate((Date) object.get("last_update"));
 
         return feed;
     }
