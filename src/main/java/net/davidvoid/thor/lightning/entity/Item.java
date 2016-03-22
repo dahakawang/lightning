@@ -16,7 +16,6 @@ public class Item {
     private boolean is_read = false;
     private Date last_update = null;
 
-
     public long getId() {
         return id;
     }
