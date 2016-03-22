@@ -7,7 +7,6 @@ import java.util.Date;
  */
 public class Feed {
     private long id = -1;
-    private Group group = null;
     private String name = "";
     private String description = "";
     private String url = "";
@@ -51,13 +50,5 @@ public class Feed {
 
     public void setLastUpdate(Date last_update) {
         this.last_update = last_update;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
     }
 }
