@@ -44,11 +44,12 @@ public class Feed {
         this.url = url;
     }
 
-    public Date getLastUpdate() {
+    public Date getLast_update() {
         return last_update;
     }
 
-    public void setLastUpdate(Date last_update) {
+    public void setLast_update(Date last_update) {
         this.last_update = last_update;
     }
+
 }
