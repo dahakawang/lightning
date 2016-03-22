@@ -1,5 +1,6 @@
 package net.davidvoid.thor.lightning.data.access;
 
+import java.util.Iterator;
 import java.util.List;
 
 import net.davidvoid.thor.lightning.entity.Entity;
@@ -22,7 +23,16 @@ public class GroupStore extends AbstractStore {
         assert (user.has_valid_id());
 
         BasicDBObject query = new BasicDBObject("user_id", user.getId());
-        return (List<Group>) (List<?>) get(query);
+        return inject_user((List<Group>) (List<?>) get(query), user);
+    }
+
+    private List<Group> inject_user(List<Group> list, User user) {
+        Iterator<Group> it = list.iterator();
+
+        while (it.hasNext()) {
+            it.next().setUser(user);
+        }
+        return list;
     }
 
     @Override
