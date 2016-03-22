@@ -22,7 +22,7 @@ public class Counter {
 
 	public long getNextId(String col_name) {
 		BasicDBObject query = new BasicDBObject("name", col_name);
-		BasicDBObject update = new BasicDBObject("$inc", new BasicDBObject("seq", 1));
+		BasicDBObject update = new BasicDBObject("$inc", new BasicDBObject("seq", 1L));
 
 		DBCollection col = data_source.getDatabase().getCollection("counter");
 		DBObject returned = col.findAndModify(query, null, null, false, update, true, true);
