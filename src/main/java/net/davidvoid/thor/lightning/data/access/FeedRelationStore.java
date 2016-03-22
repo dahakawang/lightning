@@ -7,7 +7,6 @@ import net.davidvoid.thor.lightning.entity.FeedRelation;
 import net.davidvoid.thor.lightning.entity.Group;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
 /**
@@ -52,22 +51,16 @@ public class FeedRelationStore extends AbstractStore {
     }
 
     @Override
-    protected DBCollection getCollection() {
-	    return getCollection(COLLECTION_NAME);
-    }
-
-    @Override
-    protected void generateId(Entity entity) {
-        FeedRelation relation = (FeedRelation) entity;
-        relation.setFeed_id(generateNextId(COLLECTION_NAME));
-    }
-
-    @Override
     protected DBObject getModifyQuery(Entity entity) {
         FeedRelation feed = (FeedRelation) entity;
         
     	BasicDBObject object = new BasicDBObject("group_id", feed.getGroup_id());
     	object.put("feed_id", feed.getFeed_id());
         return object;
+    }
+
+    @Override
+    protected String getCollectionName() {
+        return COLLECTION_NAME;
     }
 }

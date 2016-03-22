@@ -7,7 +7,6 @@ import net.davidvoid.thor.lightning.entity.Group;
 import net.davidvoid.thor.lightning.entity.User;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
 /**
@@ -48,17 +47,6 @@ public class GroupStore extends AbstractStore {
     }
 
     @Override
-    protected DBCollection getCollection() {
-        return getCollection(COLLECTION_NAME);
-    }
-
-    @Override
-    protected void generateId(Entity entity) {
-        Group group = (Group) entity;
-        group.setId(generateNextId(COLLECTION_NAME));
-    }
-
-    @Override
     protected DBObject getModifyQuery(Entity entity) {
         Group group = (Group) entity;
         User user = group.getUser();
@@ -67,5 +55,10 @@ public class GroupStore extends AbstractStore {
         DBObject query = new BasicDBObject("user_id", user.getId());
         query.put("id", group.getId());
         return query;
+    }
+
+    @Override
+    protected String getCollectionName() {
+        return COLLECTION_NAME;
     }
 }

@@ -66,17 +66,19 @@ public abstract class AbstractStore {
         return counter.getNextId(name);
     }
 
-    final protected DBCollection getCollection(String col_name) {
-        return data_source.getDatabase().getCollection(col_name);
+    final protected DBCollection getCollection() {
+        return data_source.getDatabase().getCollection(getCollectionName());
     }
 
     protected abstract DBObject toDBObject(Entity entity);
 
     protected abstract Entity toEntity(DBObject object);
 
-    protected abstract DBCollection getCollection();
-
-    protected abstract void generateId(Entity entity);
+    private void generateId(Entity entity) {
+        entity.setId(generateNextId(getCollectionName()));
+    }
 
     protected abstract DBObject getModifyQuery(Entity entity);
+
+    protected abstract String getCollectionName();
 }

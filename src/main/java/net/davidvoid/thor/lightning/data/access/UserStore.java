@@ -6,7 +6,6 @@ import net.davidvoid.thor.lightning.entity.User;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
 /**
@@ -51,19 +50,13 @@ public class UserStore extends AbstractStore {
     }
 
     @Override
-    protected DBCollection getCollection() {
-        return getCollection(COLLECTION_NAME);
-    }
-
-    @Override
-    protected void generateId(Entity entity) {
-        User user = (User) entity;
-        user.setId(generateNextId(COLLECTION_NAME));
-    }
-
-    @Override
     protected DBObject getModifyQuery(Entity entity) {
         User user = (User) entity;
         return new BasicDBObject("id", user.getId());
+    }
+
+    @Override
+    protected String getCollectionName() {
+        return COLLECTION_NAME;
     }
 }
