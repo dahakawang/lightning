@@ -21,13 +21,17 @@ repositories {
 
 dependencies {
     compile 'org.springframework:spring-webmvc:4.2.5.RELEASE'
+    compile 'org.springframework:spring-test:4.2.5.RELEASE'
     compile 'javax.servlet:javax.servlet-api:3.1.0'
     compile 'org.mongodb:mongodb-driver:3.2.2'
-    
+    compile 'com.github.fakemongo:fongo:2.0.6'
+
+
     def tomcatVersion = '7.0.59'
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile 'ch.qos.logback:logback-classic:1.1.6'
 }
