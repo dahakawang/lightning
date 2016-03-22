@@ -46,6 +46,10 @@ public abstract class AbstractStore {
     final protected List<Entity> get(DBObject query) {
         DBCursor cursor = getCollection().find(query);
 
+        return retrieveAll(cursor);
+    }
+
+    final protected List<Entity> retrieveAll(DBCursor cursor) {
         ArrayList<Entity> list = new ArrayList<Entity>();
         while (cursor.hasNext()) {
             Entity entity = toEntity(cursor.next());
