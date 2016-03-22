@@ -1,8 +1,10 @@
 package net.davidvoid.thor.lightning.data.access;
 
 import java.util.Date;
+import java.util.List;
 
 import net.davidvoid.thor.lightning.entity.Entity;
+import net.davidvoid.thor.lightning.entity.Feed;
 import net.davidvoid.thor.lightning.entity.Item;
 
 import com.mongodb.BasicDBObject;
@@ -18,6 +20,12 @@ import com.mongodb.DBObject;
 public class ItemStore extends AbstractStore {
 
     private static final String COLLECTION_NAME = "item";
+    
+    public List<Item> getItemsFromFeed(Feed feed) {
+        assert(feed.has_valid_id());
+        
+        return null;
+    }
 
     @Override
     protected DBObject toDBObject(Entity entity) {
