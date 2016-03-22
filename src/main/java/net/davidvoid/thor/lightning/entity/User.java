@@ -24,10 +24,12 @@ public class User implements Entity {
         this.name = name;
     }
 
+    @Override
     public long getId() {
         return id;
     }
 
+    @Override
     public void setId(long id) {
         this.id = id;
     }

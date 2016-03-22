@@ -9,10 +9,12 @@ public class FeedRelation implements Entity {
     private long feed_id = -1;
     private String name = null;
 
+    @Override
     public long getId() {
         return id;
     }
 
+    @Override
     public void setId(long id) {
         this.id = id;
     }

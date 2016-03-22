@@ -16,10 +16,12 @@ public class Item implements Entity {
     private boolean is_read = false;
     private Date last_update = null;
 
+    @Override
     public long getId() {
         return id;
     }
 
+    @Override
     public void setId(long id) {
         this.id = id;
     }

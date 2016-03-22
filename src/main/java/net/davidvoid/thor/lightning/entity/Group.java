@@ -12,10 +12,12 @@ public class Group implements Entity {
     private User user = null;
     private List<Long> feeds = new ArrayList<Long>();
 
+    @Override
     public long getId() {
         return id;
     }
 
+    @Override
     public void setId(long id) {
         this.id = id;
     }
