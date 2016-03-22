@@ -40,7 +40,7 @@ public class UserStore {
     }
 
     public User addUser(User user) {
-        assert(!user.is_valid_id());
+        assert(!user.has_valid_id());
 
         long id = nextId();
         user.setId(id);
@@ -57,7 +57,7 @@ public class UserStore {
 	}
 
     public void updateUser(User user) {
-        assert(user.is_valid_id());
+        assert(user.has_valid_id());
 
         DBCollection col = getCollection();
         BasicDBObject query = new BasicDBObject("id", user.getId());
@@ -71,7 +71,7 @@ public class UserStore {
 
     private  DBObject to_db_object(User user) {
         BasicDBObject object = new BasicDBObject("name", user.getName());
-        if (user.is_valid_id()) object.put("id", user.getId());
+        if (user.has_valid_id()) object.put("id", user.getId());
         object.put("password", user.getPassword());
 
         return object;

@@ -32,7 +32,7 @@ public class User {
         this.id = id;
     }
 
-    public boolean is_valid_id() {
+    public boolean has_valid_id() {
         return this.id != -1;
     }
 }
