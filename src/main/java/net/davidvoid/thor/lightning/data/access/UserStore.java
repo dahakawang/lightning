@@ -1,15 +1,14 @@
 package net.davidvoid.thor.lightning.data.access;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.client.MongoCollection;
 import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 
 /**
  * Created by david on 3/21/16.

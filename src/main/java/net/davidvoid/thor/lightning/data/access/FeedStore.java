@@ -1,12 +1,14 @@
 package net.davidvoid.thor.lightning.data.access;
 
-import com.mongodb.client.MongoCollection;
+import java.util.List;
+
 import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.Feed;
 import net.davidvoid.thor.lightning.entity.Group;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import com.mongodb.DBCollection;
 
 /**
  * Created by david on 3/21/16.
@@ -27,7 +29,7 @@ public class FeedStore {
 
     }
 
-    private MongoCollection getCollection() {
+    private DBCollection getCollection() {
         return data_source.getDatabase().getCollection("feed");
     }
 }
