@@ -46,11 +46,11 @@ public class Feed implements Entity {
         this.url = url;
     }
 
-    public Date getLast_update() {
+    public Date getLastUpdate() {
         return last_update;
     }
 
-    public void setLast_update(Date last_update) {
+    public void setLastUpdate(Date last_update) {
         this.last_update = last_update;
     }
 

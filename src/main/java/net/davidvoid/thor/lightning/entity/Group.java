@@ -10,7 +10,6 @@ public class Group implements Entity {
     private long id = -1;
     private String name = "";
     private User user = null;
-    private List<Long> feeds = new ArrayList<Long>();
 
     @Override
     public long getId() {
@@ -36,14 +35,6 @@ public class Group implements Entity {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public List<Long> getFeeds() {
-        return feeds;
-    }
-
-    public void setFeeds(List<Long> feeds) {
-        this.feeds = feeds;
     }
 
     @Override

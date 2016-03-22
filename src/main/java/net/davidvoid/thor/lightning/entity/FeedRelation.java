@@ -19,19 +19,19 @@ public class FeedRelation implements Entity {
         this.id = id;
     }
     
-    public long getGroup_id() {
+    public long getGroupId() {
         return group_id;
     }
 
-    public void setGroup_id(long group_id) {
+    public void setGroupId(long group_id) {
         this.group_id = group_id;
     }
 
-    public long getFeed_id() {
+    public long getFeedId() {
         return feed_id;
     }
 
-    public void setFeed_id(long feed_id) {
+    public void setFeedId(long feed_id) {
         this.feed_id = feed_id;
     }
 
