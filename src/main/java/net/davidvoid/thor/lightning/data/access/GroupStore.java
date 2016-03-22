@@ -1,7 +1,5 @@
 package net.davidvoid.thor.lightning.data.access;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,7 +9,6 @@ import net.davidvoid.thor.lightning.entity.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -19,7 +16,7 @@ import com.mongodb.DBObject;
 
 /**
  * Created by david on 3/21/16.
- * {_id: XX, user_id: long, id: long, name: string, feeds: [long]}
+ * {_id: XX, user_id: long, id: long, name: string}
  * index 1: user_id,id, unique
  */
 public class GroupStore {
@@ -68,33 +65,11 @@ public class GroupStore {
 	}
 
 	private DBObject to_object(User user, Group group) {
-		BasicDBObject object = new BasicDBObject("id", group.getId());
+		BasicDBObject object = new BasicDBObject("user_id", user.getId());
+		object.put("id", group.getId());
 		object.put("name", group.getName());
-		BasicDBList feeds_list = to_mongo_list(group.getFeeds());
-		object.put("feeds", feeds_list);
 		
 		return object;
-	}
-
-	private BasicDBList to_mongo_list(List<Long> feeds) {
-		BasicDBList list = new BasicDBList();
-		
-		Iterator<Long> it = feeds.iterator();
-		while(it.hasNext()) {
-			list.add(it.next());
-		}
-		return list;
-	}
-	
-	private List<Long> to_array_list(BasicDBList list) {
-		ArrayList<Long> ret = new ArrayList<Long>();
-		
-		Iterator<Object> it = list.iterator();
-		while(it.hasNext()) {
-			ret.add((Long)it.next());
-		}
-		
-		return ret;
 	}
 
 	private long nextId() {
@@ -115,7 +90,6 @@ public class GroupStore {
     	Group group = new Group();
     	group.setId((long)object.get("id"));
     	group.setName((String)object.get("name"));
-    	group.setFeeds(to_array_list((BasicDBList)object.get("feeds")));
     	
     	return group;
 	}
