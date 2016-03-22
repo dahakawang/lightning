@@ -13,11 +13,15 @@ import com.mongodb.DBObject;
 /**
  * Created by david on 3/21/16.
  * {_id: XXXX, id: long, name: string, password: String}
+ * index 1: id, unique
+ * index 2: name, unique
  */
 @Component
 public class UserStore {
     @Autowired
     private MongoDataSource data_source = null;
+    @Autowired
+    private Counter counter = null;
 
     public User getByName(String name) {
         DBCollection col = getCollection();
@@ -37,11 +41,20 @@ public class UserStore {
 
     public User addUser(User user) {
         assert(!user.is_valid_id());
+
+        long id = nextId();
+        user.setId(id);
+
         DBCollection col = getCollection();
         DBObject object = to_db_object(user);
+        col.insert(object);
 
-        return null;
+        return user;
     }
+
+	private long nextId() {
+		return counter.getNextId("user");
+	}
 
     public void updateUser(User user) {
         assert(user.is_valid_id());
