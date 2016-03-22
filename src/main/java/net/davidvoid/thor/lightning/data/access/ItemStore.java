@@ -1,36 +1,63 @@
 package net.davidvoid.thor.lightning.data.access;
 
-import java.util.List;
+import java.util.Date;
 
-import net.davidvoid.thor.lightning.data.source.MongoDataSource;
-import net.davidvoid.thor.lightning.entity.FeedRelation;
+import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.Item;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
-import com.mongodb.DBCollection;
 
 /**
  * Created by david on 3/21/16.
+ * collection name: item
+ * { _id: XX, id: long, name: string, author: string, content: string,
+ * url: string, is_saved: boolean, is_read: boolean, last_update; Date}
  */
-public class ItemStore {
-    @Autowired
-    private MongoDataSource data_source = null;
+public class ItemStore extends AbstractStore {
 
-    public List<Item> getItems(FeedRelation feed) {
-        return null;
+    private static final String COLLECTION_NAME = "item";
+
+    @Override
+    protected DBObject toDBObject(Entity entity) {
+        Item item = (Item) entity;
+        
+        BasicDBObject object = new BasicDBObject("id", item.getId());
+        object.put("name", item.getName());
+        object.put("author", item.getAuthor());
+        object.put("content", item.getContent());
+        object.put("url", item.getUrl());
+        object.put("is_saved", item.isSaved());
+        object.put("is_read", item.isRead());
+        object.put("last_update", item.getLastUpdate());
+
+        return object;
     }
 
-    public Item addItem(Item item) {
-        return null;
+    @Override
+    protected Entity toEntity(DBObject object) {
+        Item item = new Item();
+        item.setId((Long)object.get("id"));
+        item.setName((String)object.get("name"));
+        item.setAuthor((String)object.get("author"));
+        item.setContent((String)object.get("content"));
+        item.setUrl((String)object.get("url"));
+        item.setIsSaved((boolean)object.get("is_saved"));
+        item.setIsRead((boolean)object.get("is_read"));
+        item.setLastUpdate((Date)object.get("last_update"));
+        
+        return item;
     }
 
-    public void updateItem(Item item) {
-
+    @Override
+    protected DBObject getModifyQuery(Entity entity) {
+        Item item = (Item) entity;
+        return new BasicDBObject("id", item.getId());
     }
 
-    private DBCollection getCollection() {
-        return data_source.getDatabase().getCollection("item");
+    @Override
+    protected String getCollectionName() {
+        return COLLECTION_NAME;
     }
-
 }
