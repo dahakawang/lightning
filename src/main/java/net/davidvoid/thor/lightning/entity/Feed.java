@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by david on 3/20/16.
  */
-public class Feed {
+public class Feed implements Entity {
     private long id = -1;
     private String name = "";
     private String description = "";
@@ -51,9 +51,10 @@ public class Feed {
     public void setLast_update(Date last_update) {
         this.last_update = last_update;
     }
-    
+
+    @Override
     public boolean has_valid_id() {
-        return this.id != -1;
+        return this.id >= 0;
     }
 
 }

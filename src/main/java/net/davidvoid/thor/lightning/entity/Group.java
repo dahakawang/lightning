@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by david on 3/20/16.
  */
-public class Group {
+public class Group implements Entity {
     private long id = -1;
     private String name = "";
     private List<Long> feeds = new ArrayList<Long>();
@@ -35,7 +35,8 @@ public class Group {
         this.feeds = feeds;
     }
 
+    @Override
     public boolean has_valid_id() {
-        return id != -1;
+        return id >= 0;
     }
 }

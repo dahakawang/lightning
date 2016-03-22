@@ -3,7 +3,7 @@ package net.davidvoid.thor.lightning.entity;
 /**
  * Created by david on 3/20/16.
  */
-public class User {
+public class User implements Entity {
     private long id = -1;
     private String name = "";
     private String password = "";
@@ -32,7 +32,8 @@ public class User {
         this.id = id;
     }
 
+    @Override
     public boolean has_valid_id() {
-        return this.id != -1;
+        return this.id >= 0; 
     }
 }

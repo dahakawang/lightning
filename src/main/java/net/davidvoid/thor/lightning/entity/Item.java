@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by david on 3/20/16.
  */
-public class Item {
+public class Item implements Entity {
     private long id = -1;
     private FeedRelation feed = null;
     private String name = "";
@@ -86,5 +86,10 @@ public class Item {
 
     public void setLastUpdate(Date last_update) {
         this.last_update = last_update;
+    }
+
+    @Override
+    public boolean has_valid_id() {
+        return this.id >= 0;
     }
 }

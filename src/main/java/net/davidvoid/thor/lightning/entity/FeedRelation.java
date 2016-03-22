@@ -3,7 +3,7 @@ package net.davidvoid.thor.lightning.entity;
 /**
  * Created by david on 3/20/16.
  */
-public class FeedRelation {
+public class FeedRelation implements Entity {
     private long group_id = -1;
     private long feed_id = -1;
     private String name = null;
@@ -30,5 +30,10 @@ public class FeedRelation {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean has_valid_id() {
+        return true;
     }
 }
