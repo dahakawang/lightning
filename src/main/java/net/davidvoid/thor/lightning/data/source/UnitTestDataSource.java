@@ -8,6 +8,9 @@ import com.mongodb.MongoClient;
  * Created by david on 3/22/16.
  */
 public class UnitTestDataSource implements MongoDataSource {
+
+    Fongo fongo = new Fongo("unit_test");
+
     @Override
     public MongoClient getClient() {
         return null;
@@ -15,7 +18,6 @@ public class UnitTestDataSource implements MongoDataSource {
 
     @Override
     public DB getDatabase() {
-        Fongo fongo = new Fongo("test");
         return fongo.getDB("test");
     }
 }
