@@ -51,5 +51,9 @@ public class Feed {
     public void setLast_update(Date last_update) {
         this.last_update = last_update;
     }
+    
+    public boolean has_valid_id() {
+        return this.id != -1;
+    }
 
 }
