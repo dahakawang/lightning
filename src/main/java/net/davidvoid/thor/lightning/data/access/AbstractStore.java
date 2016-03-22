@@ -3,15 +3,15 @@ package net.davidvoid.thor.lightning.data.access;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.davidvoid.thor.lightning.data.source.MongoDataSource;
+import net.davidvoid.thor.lightning.entity.Entity;
+import net.davidvoid.thor.lightning.exception.ResourceNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-
-import net.davidvoid.thor.lightning.data.source.MongoDataSource;
-import net.davidvoid.thor.lightning.entity.Entity;
-import net.davidvoid.thor.lightning.exception.ResourceNotFoundException;
 
 public abstract class AbstractStore {
     @Autowired
@@ -65,7 +65,7 @@ public abstract class AbstractStore {
     final protected long generateNextId(String name) {
         return counter.getNextId(name);
     }
-    
+
     final protected DBCollection getCollection(String col_name) {
         return data_source.getDatabase().getCollection(col_name);
     }
