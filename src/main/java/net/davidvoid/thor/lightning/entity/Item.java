@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class Item {
     private long id = -1;
-    private Feed feed = null;
+    private FeedRelation feed = null;
     private String name = "";
     private String author = "";
     private String content = "";
@@ -25,11 +25,11 @@ public class Item {
         this.id = id;
     }
 
-    public Feed getFeed() {
+    public FeedRelation getFeed() {
         return feed;
     }
 
-    public void setFeed(Feed feed) {
+    public void setFeed(FeedRelation feed) {
         this.feed = feed;
     }
 
