@@ -9,6 +9,7 @@ import java.util.List;
 public class Group implements Entity {
     private long id = -1;
     private String name = "";
+    private User user = null;
     private List<Long> feeds = new ArrayList<Long>();
 
     public long getId() {
@@ -25,6 +26,14 @@ public class Group implements Entity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Long> getFeeds() {
