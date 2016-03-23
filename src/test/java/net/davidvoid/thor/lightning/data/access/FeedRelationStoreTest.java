@@ -51,8 +51,8 @@ public class FeedRelationStoreTest {
     public void setUp() throws Exception {
         collection = source.getDatabase().getCollection("feed_relation");
 
-        for (int i = 0; i < DATA_FIXTURE.length; ++i) {
-            DBObject object = (DBObject) JSON.parse(DATA_FIXTURE[i]);
+        for (String json : DATA_FIXTURE) {
+            DBObject object = (DBObject) JSON.parse(json);
             collection.insert(object);
         }
     }

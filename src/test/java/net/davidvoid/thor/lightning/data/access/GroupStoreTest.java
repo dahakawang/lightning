@@ -61,13 +61,13 @@ public class GroupStoreTest {
         user_col = source.getDatabase().getCollection("user");
         group_col = source.getDatabase().getCollection("group");
 
-        for (int i = 0; i < USER_DATA_FIXTURE.length; ++i) {
-            DBObject object = (DBObject) JSON.parse(USER_DATA_FIXTURE[i]);
+        for (String json : USER_DATA_FIXTURE) {
+            DBObject object = (DBObject) JSON.parse(json);
             user_col.insert(object);
         }
 
-        for (int i = 0; i < GROUP_DATA_FIXTURE.length; ++i) {
-            DBObject object = (DBObject) JSON.parse(GROUP_DATA_FIXTURE[i]);
+        for (String json : GROUP_DATA_FIXTURE) {
+            DBObject object = (DBObject) JSON.parse(json);
             group_col.insert(object);
         }
     }

@@ -48,8 +48,8 @@ public class UserStoreTest {
     public void setUp() throws Exception {
         DBCollection collection = source.getDatabase().getCollection("user");
 
-        for (int i = 0; i < DATA_FIXTURE.length; ++i) {
-            DBObject object = (DBObject) JSON.parse(DATA_FIXTURE[i]);
+        for (String json : DATA_FIXTURE) {
+            DBObject object = (DBObject) JSON.parse(json);
             collection.insert(object);
         }
     }
