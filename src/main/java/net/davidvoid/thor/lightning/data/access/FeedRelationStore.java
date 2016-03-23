@@ -2,11 +2,13 @@ package net.davidvoid.thor.lightning.data.access;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.FeedRelation;
 import net.davidvoid.thor.lightning.entity.Group;
+
+import org.springframework.stereotype.Component;
+import static org.springframework.util.Assert.isTrue;
+import static org.springframework.util.Assert.notNull;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -24,7 +26,8 @@ public class FeedRelationStore extends AbstractStore {
 
     @SuppressWarnings("unchecked")
     public List<FeedRelation> getFeedRelations(Group group) {
-    	assert(group.has_valid_id());
+        notNull(group);
+        isTrue(group.has_valid_id());
 
         BasicDBObject query = new BasicDBObject("group_id", group.getId());
         return (List<FeedRelation>) (List<?>) get(query);
