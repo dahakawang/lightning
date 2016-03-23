@@ -59,9 +59,8 @@ public class FeedRelationStore extends AbstractStore {
     @Override
     protected DBObject getModifyQuery(Entity entity) {
         FeedRelation feed = (FeedRelation) entity;
-        
-    	BasicDBObject object = new BasicDBObject("id", feed.getId());
-        return object;
+
+        return new BasicDBObject("id", feed.getId());
     }
 
     @Override

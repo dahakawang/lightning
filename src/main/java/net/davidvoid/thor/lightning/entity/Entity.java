@@ -6,8 +6,8 @@ public interface Entity {
      * the entity has a valid id, then we can assumes this entity has already
      * been saved to DB.
      */
-    public boolean has_valid_id();
-    public long getId();
-    public void setId(long id);
-    public void setInvalidId();
+    boolean has_valid_id();
+    long getId();
+    void setId(long id);
+    void setInvalidId();
 }

@@ -150,13 +150,13 @@ public class GroupStoreTest {
         try {
             group_store.add(group);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
-        
+        } catch (IllegalArgumentException e) {}
+
         group.setUser(user);
         try {
             group_store.add(group);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
     }
 
     @Test
@@ -191,20 +191,20 @@ public class GroupStoreTest {
         try {
             group_store.delete(null);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
 
         try {
             Group group = new Group();
             group_store.delete(group);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
 
         try {
             Group group = new Group();
             group.setId(1);
             group_store.delete(group);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
 
         try {
             User user = new User();
@@ -213,7 +213,7 @@ public class GroupStoreTest {
             group.setId(1);
             group_store.delete(group);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
 
         try {
             User user = new User();
@@ -222,7 +222,7 @@ public class GroupStoreTest {
             group.setUser(user);
             group_store.delete(group);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
     }
 
     @Test
@@ -244,20 +244,20 @@ public class GroupStoreTest {
         try {
             group_store.update(null);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
 
         try {
             Group group = new Group();
             group_store.update(group);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
 
         try {
             Group group = new Group();
             group.setId(1);
             group_store.update(group);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
 
         try {
             User user = new User();
@@ -266,7 +266,7 @@ public class GroupStoreTest {
             group.setId(1);
             group_store.update(group);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
 
         try {
             User user = new User();
@@ -275,6 +275,6 @@ public class GroupStoreTest {
             group.setUser(user);
             group_store.delete(group);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
     }
 }
