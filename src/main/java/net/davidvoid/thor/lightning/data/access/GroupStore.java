@@ -3,6 +3,8 @@ package net.davidvoid.thor.lightning.data.access;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.Group;
 import net.davidvoid.thor.lightning.entity.User;
@@ -14,6 +16,7 @@ import com.mongodb.DBObject;
  * Created by david on 3/21/16. {_id: XX, user_id: long, id: long, name: string}
  * index 1: user_id,id, unique
  */
+@Component
 public class GroupStore extends AbstractStore {
 
     private static final String COLLECTION_NAME = "group";

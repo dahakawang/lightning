@@ -3,6 +3,8 @@ package net.davidvoid.thor.lightning.data.access;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.Feed;
 import net.davidvoid.thor.lightning.entity.Item;
@@ -17,6 +19,7 @@ import com.mongodb.DBObject;
  * { _id: XX, id: long, name: string, author: string, content: string,
  * url: string, is_saved: boolean, is_read: boolean, last_update; Date}
  */
+@Component
 public class ItemStore extends AbstractStore {
 
     private static final String COLLECTION_NAME = "item";

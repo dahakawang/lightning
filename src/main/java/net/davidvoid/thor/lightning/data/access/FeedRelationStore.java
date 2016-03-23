@@ -2,6 +2,8 @@ package net.davidvoid.thor.lightning.data.access;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.FeedRelation;
 import net.davidvoid.thor.lightning.entity.Group;
@@ -15,6 +17,7 @@ import com.mongodb.DBObject;
  * {Id: XX, group_id: long, feed_id: long, id: long, name: string}
  * index 1 : group_id, feed_id, unique
  */
+@Component
 public class FeedRelationStore extends AbstractStore {
     
     private static final String COLLECTION_NAME = "feed_relation";

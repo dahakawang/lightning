@@ -10,6 +10,7 @@ import net.davidvoid.thor.lightning.entity.Feed;
 import net.davidvoid.thor.lightning.entity.FeedRelation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -19,6 +20,7 @@ import com.mongodb.DBObject;
  * Created by david on 3/22/16. feed collection: {_id: XX, id: long,
  * description: string, url: string, last_update: Date} index 1 : id, unique
  */
+@Component
 public class FeedStore extends AbstractStore {
 
     private static final String COLLECTION_NAME = "feed";
