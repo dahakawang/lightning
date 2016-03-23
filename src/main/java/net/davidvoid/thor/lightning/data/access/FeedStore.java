@@ -10,6 +10,7 @@ import net.davidvoid.thor.lightning.entity.FeedRelation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import static org.springframework.util.Assert.notNull;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -31,11 +32,15 @@ public class FeedStore extends AbstractStore {
 
     @SuppressWarnings("unchecked")
     public List<Feed> getFeeds(List<FeedRelation> list) {
+        notNull(list);
+
         DBObject query = get_query(list);
         return (List<Feed>) (List<?>) get(query);
     }
 
     private DBObject get_query(List<FeedRelation> list) {
+        assert list != null;
+
         BasicDBList id_list = get_id_list(list);
         return new BasicDBObject("id", new BasicDBObject("$in", id_list));
     }
@@ -45,6 +50,7 @@ public class FeedStore extends AbstractStore {
 
         for (FeedRelation relation : list) {
             id_list.add(relation.getFeedId());
+            assert relation.has_valid_id() : "the relation used to find feeds must has valid id";
         }
 
         return id_list;
@@ -52,8 +58,9 @@ public class FeedStore extends AbstractStore {
 
     @Override
     protected DBObject toDBObject(Entity entity) {
-        Feed feed = (Feed) entity;
+        assert entity != null;
 
+        Feed feed = (Feed) entity;
         BasicDBObject object = new BasicDBObject("id", feed.getId());
         object.put("description", feed.getDescription());
         object.put("url", feed.getUrl());
@@ -64,6 +71,8 @@ public class FeedStore extends AbstractStore {
 
     @Override
     protected Entity toEntity(DBObject object) {
+        assert object != null;
+
         Feed feed = new Feed();
         feed.setId((Long) object.get("id"));
         feed.setDescription((String) object.get("description"));
@@ -75,7 +84,10 @@ public class FeedStore extends AbstractStore {
 
     @Override
     protected DBObject getModifyQuery(Entity entity) {
+        assert entity != null;
+
         Feed feed = (Feed) entity;
+        assert feed.has_valid_id();
         return new BasicDBObject("id", feed.getId());
     }
 
