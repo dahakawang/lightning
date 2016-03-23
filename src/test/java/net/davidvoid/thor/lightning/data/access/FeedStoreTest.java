@@ -34,9 +34,9 @@ import static org.junit.Assert.assertNotNull;
 public class FeedStoreTest {
 
     private String[] FEED_DATA_FIXTURE = {
-            "{'_id': 1, 'id': {'$numberLong': '1'}, 'description': 'a small feed1', 'url': 'www.feed1.com', 'lastUpdate': {'$date': '2016-01-02T00:00:00.000+8'}}",
-            "{'_id': 2, 'id': {'$numberLong': '2'}, 'description': 'a small feed2', 'url': 'www.feed2.com', 'lastUpdate': {'$date': '2016-01-02T00:00:00.000+8'}}",
-            "{'_id': 3, 'id': {'$numberLong': '3'}, 'description': 'a small feed3', 'url': 'www.feed3.com', 'lastUpdate': {'$date': '2016-01-02T00:00:00.000+8'}}",
+            "{'_id': 1, 'id': {'$numberLong': '1'}, 'description': 'a small feed1', 'url': 'www.feed1.com', 'last_update': {'$date': '2016-01-02T00:00:00.000Z'}}",
+            "{'_id': 2, 'id': {'$numberLong': '2'}, 'description': 'a small feed2', 'url': 'www.feed2.com', 'last_update': {'$date': '2016-01-02T00:00:00.000Z'}}",
+            "{'_id': 3, 'id': {'$numberLong': '3'}, 'description': 'a small feed3', 'url': 'www.feed3.com', 'last_update': {'$date': '2016-01-02T00:00:00.000Z'}}",
     };
 
     @Autowired
@@ -94,7 +94,7 @@ public class FeedStoreTest {
         assertEquals(3L, feed.getId());
         assertEquals("a small feed3", feed.getDescription());
         assertEquals("www.feed3.com", feed.getUrl());
-        assertEquals(null, feed.getName());
+        assertEquals("", feed.getName());
         assertNotNull(feed.getLastUpdate());
     }
 
@@ -120,7 +120,7 @@ public class FeedStoreTest {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    public void Delete_ValidFeed_WillSuccess() throws Exception {
         assertEquals(3, collection.count());
         Feed feed = new Feed();
         feed.setId(1);
@@ -130,18 +130,20 @@ public class FeedStoreTest {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void Update_ValidFeed_WillSuccess() throws Exception {
         Date date = new Date();
         Feed feed = new Feed();
         feed.setId(1);
         feed.setLastUpdate(date);
 
+        store.update(feed);
+
         assertEquals(3, collection.count());
 
-        DBObject object = collection.findOne(new BasicDBObject("id", 3L));
+        DBObject object = collection.findOne(new BasicDBObject("id", 1L));
         assertEquals("", object.get("description"));
         assertEquals("", object.get("url"));
         assertEquals(date, object.get("last_update"));
-        assertEquals(3, object.get("id"));
+        assertEquals(1L, object.get("id"));
     }
 }
