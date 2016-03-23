@@ -5,8 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.util.Collections;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
+import com.mongodb.BasicDBObject;
 import net.davidvoid.thor.lightning.config.RootConfig;
 import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.FeedRelation;
@@ -121,7 +123,6 @@ public class FeedRelationStoreTest {
 
     @Test
     public void Add_InvalidRelation_WillThrow() {
-
         FeedRelation relation = new FeedRelation();
         relation.setGroupId(1);
         relation.setFeedId(2);
@@ -131,12 +132,12 @@ public class FeedRelationStoreTest {
         try {
             store.add(null);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
 
         try {
             store.add(relation);
             fail("should throw");
-        } catch (IllegalArgumentException e) {};
+        } catch (IllegalArgumentException e) {}
     }
 
     @Test
@@ -154,8 +155,65 @@ public class FeedRelationStoreTest {
     }
 
     @Test
-    public void testUpdate() {
-        fail("Not yet implemented");
+    public void Delete_ValidRelationById_WillSuccessful() {
+        Group group = new Group();
+        group.setId(2);
+
+        assertEquals(2, store.getFeedRelations(group).size());
+
+        FeedRelation relation = new FeedRelation();
+        relation.setId(4);
+        store.delete(relation);
+
+        assertEquals(1, store.getFeedRelations(group).size());
     }
 
+    @Test
+    public void Delete_InvalidRelation_WillSuccessful() {
+        try {
+            store.delete(null);
+            fail("should throw");
+        } catch (IllegalArgumentException e) {}
+
+        try {
+            FeedRelation relation = new FeedRelation();
+            store.delete(relation);
+            fail("should throw");
+        } catch (IllegalArgumentException e) {}
+    }
+
+    @Test
+    public void Update_ValidRelation_WillSuccess() {
+        DBObject obj = collection.findOne(new BasicDBObject("id", 4));
+        assertEquals("feed2", obj.get("name"));
+
+        FeedRelation relation = new FeedRelation();
+        relation.setId(4);
+        relation.setFeedId(2);
+        relation.setFeedId(2);
+        relation.setName("hello");
+        store.update(relation);
+
+        assertEquals(5, collection.count());
+        obj = collection.findOne(new BasicDBObject("id", 4));
+        assertEquals("hello", obj.get("name"));
+
+        relation.setId(9);
+        store.update(relation);
+        assertEquals(5, collection.count());
+    }
+
+    @Test
+    public void Update_InvalidRelation_WillSuccess() {
+        try {
+            store.update(null);
+            fail("should throw");
+        } catch (IllegalArgumentException e) {}
+
+        try {
+            FeedRelation relation = new FeedRelation();
+            store.update(relation);
+            fail("should throw");
+        } catch (IllegalArgumentException e) {}
+    }
 }
