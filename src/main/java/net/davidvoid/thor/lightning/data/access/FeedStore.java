@@ -17,8 +17,9 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 /**
- * Created by david on 3/22/16. feed collection: {_id: XX, id: long,
- * description: string, url: string, last_update: Date} index 1 : id, unique
+ * Created by david on 3/22/16. feed collection:
+ * {_id: XX, id: long, description: string, url: string, last_update: Date}
+ * index 1 : id, unique
  */
 @Component
 public class FeedStore extends AbstractStore {
@@ -37,17 +38,14 @@ public class FeedStore extends AbstractStore {
 
     private DBObject get_query(List<FeedRelation> list) {
         BasicDBList id_list = get_id_list(list);
-        BasicDBObject query = new BasicDBObject("id", new BasicDBObject("$in",
-                id_list));
-        return query;
+        return new BasicDBObject("id", new BasicDBObject("$in", id_list));
     }
 
     private BasicDBList get_id_list(List<FeedRelation> list) {
         BasicDBList id_list = new BasicDBList();
-        Iterator<FeedRelation> it = list.iterator();
 
-        while (it.hasNext()) {
-            id_list.add(it.next().getFeedId());
+        for (FeedRelation relation : list) {
+            id_list.add(relation.getFeedId());
         }
 
         return id_list;
