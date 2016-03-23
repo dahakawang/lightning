@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.util.Collections;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import com.mongodb.BasicDBObject;

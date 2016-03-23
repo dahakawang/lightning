@@ -1,7 +1,5 @@
 package net.davidvoid.thor.lightning.data.access;
 
-import static org.springframework.util.Assert.isTrue;
-
 import java.util.ArrayList;
 import java.util.List;
 

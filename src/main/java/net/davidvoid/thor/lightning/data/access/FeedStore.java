@@ -1,7 +1,6 @@
 package net.davidvoid.thor.lightning.data.access;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import net.davidvoid.thor.lightning.data.source.MongoDataSource;
