@@ -4,6 +4,7 @@ import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.User;
 
 import org.springframework.stereotype.Component;
+import static org.springframework.util.Assert.*;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -18,6 +19,9 @@ public class UserStore extends AbstractStore {
     private static final String COLLECTION_NAME = "user";
 
     public User getByName(String name) {
+        notNull(name);
+        hasLength(name);
+        
         BasicDBObject query = new BasicDBObject("name", name);
         return (User) getOne(query);
     }
@@ -29,8 +33,9 @@ public class UserStore extends AbstractStore {
 
     @Override
     protected DBObject toDBObject(Entity entity) {
+        assert entity != null;
+        
         User user = (User) entity;
-
         BasicDBObject object = new BasicDBObject("name", user.getName());
         if (user.has_valid_id())
             object.put("id", user.getId());
@@ -41,6 +46,8 @@ public class UserStore extends AbstractStore {
 
     @Override
     protected Entity toEntity(DBObject object) {
+        assert object != null;
+        
         User user = new User();
         user.setId((long) object.get("id"));
         user.setName((String) object.get("name"));
@@ -51,6 +58,8 @@ public class UserStore extends AbstractStore {
 
     @Override
     protected DBObject getModifyQuery(Entity entity) {
+        assert entity != null;
+        
         User user = (User) entity;
         return new BasicDBObject("id", user.getId());
     }
