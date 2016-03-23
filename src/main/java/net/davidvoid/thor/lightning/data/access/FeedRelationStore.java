@@ -60,8 +60,7 @@ public class FeedRelationStore extends AbstractStore {
     protected DBObject getModifyQuery(Entity entity) {
         FeedRelation feed = (FeedRelation) entity;
         
-    	BasicDBObject object = new BasicDBObject("group_id", feed.getGroupId());
-    	object.put("feed_id", feed.getFeedId());
+    	BasicDBObject object = new BasicDBObject("id", feed.getId());
         return object;
     }
 
