@@ -38,4 +38,9 @@ public class User implements Entity {
     public boolean has_valid_id() {
         return this.id >= 0; 
     }
+
+    @Override
+    public void setInvalidId() {
+        this.id = -1;
+    }
 }

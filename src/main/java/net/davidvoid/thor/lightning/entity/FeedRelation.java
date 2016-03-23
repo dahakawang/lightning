@@ -47,4 +47,9 @@ public class FeedRelation implements Entity {
     public boolean has_valid_id() {
         return id >= 0;
     }
+
+    @Override
+    public void setInvalidId() {
+        this.id = -1;
+    }
 }

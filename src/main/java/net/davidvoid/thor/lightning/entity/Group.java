@@ -1,7 +1,5 @@
 package net.davidvoid.thor.lightning.entity;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by david on 3/20/16.
@@ -40,5 +38,10 @@ public class Group implements Entity {
     @Override
     public boolean has_valid_id() {
         return id >= 0;
+    }
+
+    @Override
+    public void setInvalidId() {
+        this.id = -1;
     }
 }

@@ -59,4 +59,9 @@ public class Feed implements Entity {
         return this.id >= 0;
     }
 
+    @Override
+    public void setInvalidId() {
+        this.id = -1;
+    }
+
 }
