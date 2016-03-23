@@ -36,10 +36,8 @@ public class GroupStore extends AbstractStore {
         assert user.has_valid_id() : "user is invalid";
         assert list != null;
 
-        Iterator<Group> it = list.iterator();
-
-        while (it.hasNext()) {
-            it.next().setUser(user);
+        for (Group group : list) {
+            group.setUser(user);
         }
         return list;
     }
