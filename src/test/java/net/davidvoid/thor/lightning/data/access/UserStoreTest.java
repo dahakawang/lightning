@@ -157,7 +157,7 @@ public class UserStoreTest {
 
         try {
             store.add(user1);
-            fail("shold throw an exception");
+            fail("should throw an exception");
         } catch (IllegalArgumentException e) {
         }
 
@@ -229,7 +229,7 @@ public class UserStoreTest {
         user1.setPassword("123");
         try {
             store.delete(user1);
-            fail("shold throw an exception");
+            fail("should throw an exception");
         } catch (IllegalArgumentException e) {
         }
 
@@ -237,7 +237,7 @@ public class UserStoreTest {
     }
 
     @Test
-    public void Delete_UserServalTimes_WillThrow() {
+    public void Delete_UserSeveralTimes_WillThrow() {
         DBCollection collection = source.getDatabase().getCollection("user");
         assertEquals(4, collection.count());
 
@@ -247,7 +247,7 @@ public class UserStoreTest {
 
         try {
             store.delete(user);
-            fail("shold throw an exception");
+            fail("should throw an exception");
         } catch (IllegalArgumentException e) {
         }
         assertEquals(3, collection.count());
@@ -278,7 +278,7 @@ public class UserStoreTest {
         user1.setPassword("123");
         try {
             store.update(user1);
-            fail("shold throw an exception");
+            fail("should throw an exception");
         } catch (IllegalArgumentException e) {
         }
 

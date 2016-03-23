@@ -102,7 +102,7 @@ public class FeedRelationStoreTest {
     }
 
     @Test
-    public void Add_ValidRelation_WillCreatenewInsertion() {
+    public void Add_ValidRelation_WillCreateNewInsertion() {
         collection.remove(null);
 
         FeedRelation relation = new FeedRelation();

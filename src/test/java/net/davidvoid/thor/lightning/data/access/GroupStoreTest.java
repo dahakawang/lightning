@@ -149,13 +149,13 @@ public class GroupStoreTest {
         group.setName("group1");
         try {
             group_store.add(group);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
         
         group.setUser(user);
         try {
             group_store.add(group);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
     }
 
@@ -190,20 +190,20 @@ public class GroupStoreTest {
     public void Delete_anInvalidGroup_WillThrow() {
         try {
             group_store.delete(null);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
 
         try {
             Group group = new Group();
             group_store.delete(group);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
 
         try {
             Group group = new Group();
             group.setId(1);
             group_store.delete(group);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
 
         try {
@@ -212,7 +212,7 @@ public class GroupStoreTest {
             group.setUser(user);
             group.setId(1);
             group_store.delete(group);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
 
         try {
@@ -221,7 +221,7 @@ public class GroupStoreTest {
             Group group = new Group();
             group.setUser(user);
             group_store.delete(group);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
     }
 
@@ -231,32 +231,32 @@ public class GroupStoreTest {
         List<Group> groups = group_store.getGroups(user);
         Group group = groups.get(0);
         
-        group.setName("pipi");
+        group.setName("pipe");
         group_store.update(group);
         
         DBObject obj = group_col.findOne(new BasicDBObject("id", group.getId()));
         assertNotNull(obj);
-        assertEquals("pipi", obj.get("name"));
+        assertEquals("pipe", obj.get("name"));
     }
 
     @Test
     public void Update_anInvalidGroup_WillThrow() {
         try {
             group_store.update(null);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
 
         try {
             Group group = new Group();
             group_store.update(group);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
 
         try {
             Group group = new Group();
             group.setId(1);
             group_store.update(group);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
 
         try {
@@ -265,7 +265,7 @@ public class GroupStoreTest {
             group.setUser(user);
             group.setId(1);
             group_store.update(group);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
 
         try {
@@ -274,7 +274,7 @@ public class GroupStoreTest {
             Group group = new Group();
             group.setUser(user);
             group_store.delete(group);
-            fail("should thorw");
+            fail("should throw");
         } catch (IllegalArgumentException e) {};
     }
 }
