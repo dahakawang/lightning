@@ -30,7 +30,7 @@ public class FeedStore extends AbstractStore {
     private Counter counter = null;
 
     @SuppressWarnings("unchecked")
-    public List<Feed> getFeed(List<FeedRelation> list) {
+    public List<Feed> getFeeds(List<FeedRelation> list) {
         DBObject query = get_query(list);
         return (List<Feed>) (List<?>) get(query);
     }
