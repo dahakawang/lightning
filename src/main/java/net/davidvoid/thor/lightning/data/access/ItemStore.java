@@ -35,7 +35,9 @@ public class ItemStore extends AbstractStore {
         BY_NAME_ASC, BY_NAME_DSC}
 
     private static final String COLLECTION_NAME = "item";
-    
+
+
+
     @SuppressWarnings("unchecked")
     public List<Item> getItemsFromFeed(Feed feed) {
         notNull(feed);
@@ -46,16 +48,25 @@ public class ItemStore extends AbstractStore {
         return (List<Item>) (List<?>) get(query, order);
     }
 
+    public long count(Feed feed) {
+        notNull(feed);
+        isTrue(feed.has_valid_id());
+
+        BasicDBObject query = new BasicDBObject("id", feed.getId());
+        return count(query);
+    }
 
     @SuppressWarnings("unchecked")
-    public List<Item> getItemsFromFeed(Feed feed, FILTER_OPTION filter_option, SORT_OPTION sort_option) {
+    public List<Item> getItemsFromFeed(Feed feed, int offset, int count, FILTER_OPTION filter_option, SORT_OPTION sort_option) {
         notNull(feed);
         isTrue(feed.has_valid_id());
         BasicDBObject query = getQuery(feed, filter_option);
         BasicDBObject order = getOrder(sort_option);
 
-        return (List<Item>) (List<?>) get(query, order);
+        return (List<Item>) (List<?>) get(query, order, offset, count);
     }
+
+
 
     private BasicDBObject getOrder(SORT_OPTION sort_option) {
         switch (sort_option){
