@@ -1,16 +1,15 @@
 package net.davidvoid.thor.lightning.data.access;
 
+import static org.springframework.util.Assert.notNull;
+
 import java.util.Date;
 import java.util.List;
 
-import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.Feed;
 import net.davidvoid.thor.lightning.entity.FeedRelation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import static org.springframework.util.Assert.notNull;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -25,10 +24,6 @@ import com.mongodb.DBObject;
 public class FeedStore extends AbstractStore {
 
     private static final String COLLECTION_NAME = "feed";
-    @Autowired
-    private MongoDataSource data_source = null;
-    @Autowired
-    private Counter counter = null;
 
     @SuppressWarnings("unchecked")
     public List<Feed> getFeeds(List<FeedRelation> list) {
