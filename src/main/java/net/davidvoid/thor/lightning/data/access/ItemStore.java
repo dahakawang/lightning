@@ -25,10 +25,14 @@ import com.mongodb.DBObject;
  * index 2: feed_id, name
  * index 3: feed_id, last_update
  * index 4: feed_id, is_read, last_update
- * index 4: feed_id, is_read, name 
+ * index 5: feed_id, is_read, name
  */
 @Component
 public class ItemStore extends AbstractStore {
+
+    public enum FILTER_OPTION { ONLY_READ, ONLY_UNREAD, BOTH }
+    public enum SORT_OPTION { BY_UPDATE_DATE_ASC, BY_UPDATE_DATE_DSC,
+        BY_NAME_ASC, BY_NAME_DSC}
 
     private static final String COLLECTION_NAME = "item";
     
@@ -38,7 +42,49 @@ public class ItemStore extends AbstractStore {
         isTrue(feed.has_valid_id());
         
         BasicDBObject query = new BasicDBObject("id", feed.getId());
-        return (List<Item>) (List<?>) get(query);
+        BasicDBObject order = new BasicDBObject("last_update", 1);
+        return (List<Item>) (List<?>) get(query, order);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public List<Item> getItemsFromFeed(Feed feed, FILTER_OPTION filter_option, SORT_OPTION sort_option) {
+        notNull(feed);
+        isTrue(feed.has_valid_id());
+        BasicDBObject query = getQuery(feed, filter_option);
+        BasicDBObject order = getOrder(sort_option);
+
+        return (List<Item>) (List<?>) get(query, order);
+    }
+
+    private BasicDBObject getOrder(SORT_OPTION sort_option) {
+        switch (sort_option){
+            case BY_NAME_ASC:
+                return new BasicDBObject("name", 1);
+            case BY_NAME_DSC:
+                return new BasicDBObject("name", -1);
+            case BY_UPDATE_DATE_ASC:
+                return new BasicDBObject("last_update", 1);
+            case BY_UPDATE_DATE_DSC:
+                return new BasicDBObject("last_update", -1);
+            default:
+                assert false;
+                return null;
+        }
+    }
+
+    private BasicDBObject getQuery(Feed feed, FILTER_OPTION filter_option) {
+        assert feed != null;
+        assert feed.has_valid_id();
+
+        BasicDBObject object = new BasicDBObject("id", feed.getId());
+        if (filter_option == FILTER_OPTION.ONLY_READ) {
+            object.put("is_read", true);
+        }
+        if (filter_option == FILTER_OPTION.ONLY_UNREAD) {
+            object.put("is_read", false);
+        }
+        return object;
     }
 
     @Override
