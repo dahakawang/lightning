@@ -51,6 +51,20 @@ public abstract class AbstractStore {
         getCollection().update(query, update, false, true);
     }
 
+    final protected long count(DBObject query) {
+        assert query != null : "mongodb query should be be null";
+
+        return getCollection().find(query).count();
+    }
+
+
+    final protected List<Entity> get(DBObject query, DBObject sort, int offset, int count) {
+        assert query != null : "mongodb query should be be null";
+
+        DBCursor cursor = getCollection().find(query).sort(sort).skip(offset).limit(count);
+        return retrieveAll(cursor);
+    }
+
     final protected List<Entity> get(DBObject query, DBObject sort) {
         assert query != null : "mongodb query should be be null";
 
