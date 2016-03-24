@@ -1,13 +1,16 @@
 package net.davidvoid.thor.lightning.data.access;
 
+import static org.springframework.util.Assert.isTrue;
+import static org.springframework.util.Assert.notNull;
+
 import java.util.Date;
 import java.util.List;
-
-import org.springframework.stereotype.Component;
 
 import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.Feed;
 import net.davidvoid.thor.lightning.entity.Item;
+
+import org.springframework.stereotype.Component;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -16,23 +19,33 @@ import com.mongodb.DBObject;
 /**
  * Created by david on 3/21/16.
  * collection name: item
- * { _id: XX, id: long, name: string, author: string, content: string,
+ * { _id: XX, feed_id: long, id: long, name: string, author: string, content: string, 
  * url: string, is_saved: boolean, is_read: boolean, last_update; Date}
+ * index 1: id
+ * index 2: feed_id, name
+ * index 3: feed_id, last_update
+ * index 4: feed_id, is_read, last_update
+ * index 4: feed_id, is_read, name 
  */
 @Component
 public class ItemStore extends AbstractStore {
 
     private static final String COLLECTION_NAME = "item";
     
+    @SuppressWarnings("unchecked")
     public List<Item> getItemsFromFeed(Feed feed) {
-        assert(feed.has_valid_id());
+        notNull(feed);
+        isTrue(feed.has_valid_id());
         
-        return null;
+        BasicDBObject query = new BasicDBObject("id", feed.getId());
+        return (List<Item>) (List<?>) get(query);
     }
 
     @Override
     protected DBObject toDBObject(Entity entity) {
+        assert entity != null;
         Item item = (Item) entity;
+        assert item.has_valid_id();
         
         BasicDBObject object = new BasicDBObject("id", item.getId());
         object.put("name", item.getName());
@@ -48,6 +61,8 @@ public class ItemStore extends AbstractStore {
 
     @Override
     protected Entity toEntity(DBObject object) {
+        assert object != null;
+        
         Item item = new Item();
         item.setId((Long)object.get("id"));
         item.setName((String)object.get("name"));
@@ -63,7 +78,10 @@ public class ItemStore extends AbstractStore {
 
     @Override
     protected DBObject getModifyQuery(Entity entity) {
+        assert entity != null;
+        
         Item item = (Item) entity;
+        assert item.has_valid_id();
         return new BasicDBObject("id", item.getId());
     }
 
