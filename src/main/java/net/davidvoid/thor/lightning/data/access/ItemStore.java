@@ -45,7 +45,7 @@ public class ItemStore extends AbstractStore {
         
         BasicDBObject query = new BasicDBObject("id", feed.getId());
         BasicDBObject order = new BasicDBObject("last_update", 1);
-        return (List<Item>) (List<?>) get(query, order);
+        return inject_feed((List<Item>) (List<?>) get(query, order), feed);
     }
 
     public long count(Feed feed) {
@@ -63,10 +63,17 @@ public class ItemStore extends AbstractStore {
         BasicDBObject query = getQuery(feed, filter_option);
         BasicDBObject order = getOrder(sort_option);
 
-        return (List<Item>) (List<?>) get(query, order, offset, count);
+        return inject_feed((List<Item>) (List<?>) get(query, order, offset, count), feed);
     }
 
 
+
+    private List<Item> inject_feed(List<Item> list, Feed feed) {
+        for (Item item : list) {
+            item.setFeed(feed);
+        }
+        return list;
+    }
 
     private BasicDBObject getOrder(SORT_OPTION sort_option) {
         switch (sort_option){

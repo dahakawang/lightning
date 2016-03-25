@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class Item implements Entity {
     private long id = -1;
-    private FeedRelation feed = null;
+    private Feed feed = null;
     private String name = "";
     private String author = "";
     private String content = "";
@@ -26,11 +26,11 @@ public class Item implements Entity {
         this.id = id;
     }
 
-    public FeedRelation getFeed() {
+    public Feed getFeed() {
         return feed;
     }
 
-    public void setFeed(FeedRelation feed) {
+    public void setFeed(Feed feed) {
         this.feed = feed;
     }
 
