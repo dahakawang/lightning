@@ -43,7 +43,7 @@ public class ItemStore extends AbstractStore {
         notNull(feed);
         isTrue(feed.has_valid_id());
         
-        BasicDBObject query = new BasicDBObject("id", feed.getId());
+        BasicDBObject query = new BasicDBObject("feed_id", feed.getId());
         BasicDBObject order = new BasicDBObject("last_update", 1);
         return inject_feed((List<Item>) (List<?>) get(query, order), feed);
     }
