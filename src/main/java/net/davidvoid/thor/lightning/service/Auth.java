@@ -30,7 +30,7 @@ public class Auth {
         return user != null;
     }
     
-    public User getCurrentUser() {
+    public User getUser() {
         return user;
     }
     
