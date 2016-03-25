@@ -110,6 +110,8 @@ public class ItemStore extends AbstractStore {
         assert entity != null;
         Item item = (Item) entity;
         assert item.has_valid_id();
+        notNull(item.getFeed(), "a item should be tied to a valid feed object");
+        isTrue(item.getFeed().has_valid_id(), "a item should be tied to a vliad feed object");
         
         BasicDBObject object = new BasicDBObject("id", item.getId());
         object.put("name", item.getName());
@@ -119,6 +121,7 @@ public class ItemStore extends AbstractStore {
         object.put("is_saved", item.isSaved());
         object.put("is_read", item.isRead());
         object.put("last_update", item.getLastUpdate());
+        object.put("feed_id", item.getFeed().getId());
 
         return object;
     }
