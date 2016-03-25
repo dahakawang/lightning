@@ -11,6 +11,7 @@ public class Feed implements Entity {
     private String description = "";
     private String url = "";
     private Date last_update = null;
+    private FeedRelation relation = null;
 
     @Override
     public long getId() {
@@ -62,6 +63,14 @@ public class Feed implements Entity {
     @Override
     public void setInvalidId() {
         this.id = -1;
+    }
+
+    public FeedRelation getRelation() {
+        return relation;
+    }
+
+    public void setRelation(FeedRelation relation) {
+        this.relation = relation;
     }
 
 }

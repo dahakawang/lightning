@@ -4,10 +4,12 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
+
 import net.davidvoid.thor.lightning.config.RootConfig;
 import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.Feed;
 import net.davidvoid.thor.lightning.entity.FeedRelation;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -83,6 +86,10 @@ public class FeedStoreTest {
 
         List<Feed> feeds = store.getFeeds(relations);
         assertEquals(3, feeds.size());
+        Collections.sort(feeds, (Feed left, Feed right)->((Long)left.getId()).compareTo(right.getId()));
+        assertEquals(relations.get(0), feeds.get(0).getRelation());
+        assertEquals(relations.get(1), feeds.get(1).getRelation());
+        assertEquals(relations.get(2), feeds.get(2).getRelation());
 
         relations.clear();
         relations.add(relation);
@@ -95,6 +102,7 @@ public class FeedStoreTest {
         assertEquals("a small feed3", feed.getDescription());
         assertEquals("www.feed3.com", feed.getUrl());
         assertEquals("", feed.getName());
+        assertEquals(relation, feed.getRelation());
         assertNotNull(feed.getLastUpdate());
     }
 

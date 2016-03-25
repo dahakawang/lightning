@@ -3,6 +3,7 @@ package net.davidvoid.thor.lightning.data.access;
 import static org.springframework.util.Assert.notNull;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import net.davidvoid.thor.lightning.entity.Entity;
@@ -30,7 +31,21 @@ public class FeedStore extends AbstractStore {
         notNull(list);
 
         DBObject query = get_query(list);
-        return (List<Feed>) (List<?>) get(query);
+        return inject_relations((List<Feed>) (List<?>) get(query), list);
+    }
+
+    private List<Feed> inject_relations(List<Feed> list, List<FeedRelation> relations) {
+        HashMap<Long, Feed> relation_map = new HashMap<Long, Feed>();
+        for (Feed relation : list) {
+            relation_map.put(relation.getId(), relation);
+        }
+        
+        for (FeedRelation relation : relations) {
+            Long id = relation.getFeedId();
+            Feed feed = relation_map.get(id);
+            if (feed != null) feed.setRelation(relation);
+        }
+        return list;
     }
 
     private DBObject get_query(List<FeedRelation> list) {
