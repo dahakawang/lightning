@@ -60,6 +60,19 @@ public class UserStoreTest {
     }
 
     @Test
+    public void GetUser_WhenHaveUser_WillReturnUser() {
+        User user = store.getUser();
+        assertNotNull(user);
+        
+        source.getDatabase().getCollection("user").remove(null);
+        
+        try {
+            user = store.getUser();
+            fail("should throw");
+        } catch (ResourceNotFoundException e) {}
+    }
+
+    @Test
     public void GetByName_WhenGivenValidUserName_WillReturnUser()
             throws Exception {
         User user = store.getByName("david");

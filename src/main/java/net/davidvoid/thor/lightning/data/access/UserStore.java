@@ -17,6 +17,10 @@ import com.mongodb.DBObject;
 public class UserStore extends AbstractStore {
 
     private static final String COLLECTION_NAME = "user";
+    
+    public User getUser() {
+        return (User) getOne(new BasicDBObject());
+    }
 
     public User getByName(String name) {
         notNull(name);
