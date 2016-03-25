@@ -75,12 +75,14 @@ public class FeedRelationStoreTest {
         assertEquals(2, r.getGroupId());
         assertEquals(2, r.getFeedId());
         assertEquals(4, r.getId());
+        assertEquals(group, r.getGroup());
         assertEquals("feed2", r.getName());
         
         r = relations.get(1);
         assertEquals(2, r.getGroupId());
         assertEquals(3, r.getFeedId());
         assertEquals(5, r.getId());
+        assertEquals(group, r.getGroup());
         assertEquals("feed3", r.getName());
         
     }

@@ -8,6 +8,7 @@ public class FeedRelation implements Entity {
     private long group_id = -1;
     private long feed_id = -1;
     private String name = null;
+    private Group group = null;
 
     @Override
     public long getId() {
@@ -51,5 +52,13 @@ public class FeedRelation implements Entity {
     @Override
     public void setInvalidId() {
         this.id = -1;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }

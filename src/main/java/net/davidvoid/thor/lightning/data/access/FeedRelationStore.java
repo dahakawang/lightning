@@ -30,7 +30,14 @@ public class FeedRelationStore extends AbstractStore {
         isTrue(group.has_valid_id());
 
         BasicDBObject query = new BasicDBObject("group_id", group.getId());
-        return (List<FeedRelation>) (List<?>) get(query);
+        return inject_group((List<FeedRelation>) (List<?>) get(query), group);
+    }
+
+    private List<FeedRelation> inject_group(List<FeedRelation> list, Group group) {
+        for (FeedRelation relation : list) {
+            relation.setGroup(group);
+        }
+        return list;
     }
 
     @Override
