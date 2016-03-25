@@ -25,15 +25,6 @@ public class Auth {
         }
     }
     
-    public boolean registered() {
-        ensureUserLoaded();
-        return user != null;
-    }
-    
-    public User getUser() {
-        return user;
-    }
-    
     synchronized public void register(String name, String token) {
         ensureUserLoaded();
         if (name != null) throw new DuplicateUserException("the user already registered");
@@ -43,6 +34,11 @@ public class Auth {
         user.setPassword(token);
         store.add(user);
         this.user = user;
+    }
+
+    public User getUser() {
+        ensureUserLoaded();
+        return user;
     }
 
     private void ensureUserLoaded() {
@@ -56,7 +52,7 @@ public class Auth {
             
         }
     }
-    
+
     private User retrieve_token() {
         try {
             User user = store.getUser();
