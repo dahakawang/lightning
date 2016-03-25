@@ -52,7 +52,7 @@ public class ItemStore extends AbstractStore {
         notNull(feed);
         isTrue(feed.has_valid_id());
 
-        BasicDBObject query = new BasicDBObject("id", feed.getId());
+        BasicDBObject query = new BasicDBObject("feed_id", feed.getId());
         return count(query);
     }
 
@@ -95,7 +95,7 @@ public class ItemStore extends AbstractStore {
         assert feed != null;
         assert feed.has_valid_id();
 
-        BasicDBObject object = new BasicDBObject("id", feed.getId());
+        BasicDBObject object = new BasicDBObject("feed_id", feed.getId());
         if (filter_option == FILTER_OPTION.ONLY_READ) {
             object.put("is_read", true);
         }
