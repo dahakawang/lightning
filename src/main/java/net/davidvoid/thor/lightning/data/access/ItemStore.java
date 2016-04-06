@@ -10,10 +10,11 @@ import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.Feed;
 import net.davidvoid.thor.lightning.entity.Item;
 
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 
 
 /**
@@ -106,14 +107,14 @@ public class ItemStore extends AbstractStore {
     }
 
     @Override
-    protected DBObject toDBObject(Entity entity) {
+    protected Document toDocument(Entity entity) {
         assert entity != null;
         Item item = (Item) entity;
         assert item.has_valid_id();
         notNull(item.getFeed(), "a item should be tied to a valid feed object");
         isTrue(item.getFeed().has_valid_id(), "a item should be tied to a vliad feed object");
         
-        BasicDBObject object = new BasicDBObject("id", item.getId());
+        Document object = new Document("id", item.getId());
         object.put("name", item.getName());
         object.put("author", item.getAuthor());
         object.put("content", item.getContent());
@@ -127,7 +128,7 @@ public class ItemStore extends AbstractStore {
     }
 
     @Override
-    protected Entity toEntity(DBObject object) {
+    protected Entity toEntity(Document object) {
         assert object != null;
         
         Item item = new Item();
@@ -144,7 +145,7 @@ public class ItemStore extends AbstractStore {
     }
 
     @Override
-    protected DBObject getModifyQuery(Entity entity) {
+    protected Bson getModifyQuery(Entity entity) {
         assert entity != null;
         
         Item item = (Item) entity;

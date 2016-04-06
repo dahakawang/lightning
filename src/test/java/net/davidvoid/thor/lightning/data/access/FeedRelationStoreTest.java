@@ -7,12 +7,12 @@ import static org.junit.Assert.fail;
 import java.util.Collections;
 import java.util.List;
 
-import com.mongodb.BasicDBObject;
 import net.davidvoid.thor.lightning.config.RootConfig;
 import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.FeedRelation;
 import net.davidvoid.thor.lightning.entity.Group;
 
+import org.bson.Document;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,9 +22,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.MongoCollection;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
@@ -44,15 +43,15 @@ public class FeedRelationStoreTest {
     @Autowired
     FeedRelationStore store = null;
 
-    DBCollection collection = null;
+    MongoCollection<Document> collection = null;
 
     @Before
     public void setUp() throws Exception {
         collection = source.getDatabase().getCollection("feed_relation");
 
         for (String json : DATA_FIXTURE) {
-            DBObject object = (DBObject) JSON.parse(json);
-            collection.insert(object);
+            Document object = Document.parse(json);
+            collection.insertOne(object);
         }
     }
 
@@ -104,7 +103,7 @@ public class FeedRelationStoreTest {
 
     @Test
     public void Add_ValidRelation_WillCreateNewInsertion() {
-        collection.remove(null);
+        collection.deleteMany(new Document());
 
         FeedRelation relation = new FeedRelation();
         relation.setGroupId(1);
@@ -113,7 +112,7 @@ public class FeedRelationStoreTest {
         store.add(relation);
         
         assertEquals(1, collection.count());
-        DBObject obj = collection.findOne();
+        Document obj = collection.find().first();
         assertNotNull(obj);
         
         assertEquals(5L, obj.keySet().size());
@@ -185,7 +184,7 @@ public class FeedRelationStoreTest {
 
     @Test
     public void Update_ValidRelation_WillSuccess() {
-        DBObject obj = collection.findOne(new BasicDBObject("id", 4));
+        Document obj = collection.find(new BasicDBObject("id", 4)).first();
         assertEquals("feed2", obj.get("name"));
 
         FeedRelation relation = new FeedRelation();
@@ -196,7 +195,7 @@ public class FeedRelationStoreTest {
         store.update(relation);
 
         assertEquals(5, collection.count());
-        obj = collection.findOne(new BasicDBObject("id", 4));
+        obj = collection.find(new BasicDBObject("id", 4)).first();
         assertEquals("hello", obj.get("name"));
 
         relation.setId(9);

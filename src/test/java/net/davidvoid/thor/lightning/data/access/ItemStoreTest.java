@@ -1,6 +1,9 @@
 package net.davidvoid.thor.lightning.data.access;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
@@ -12,6 +15,7 @@ import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.Feed;
 import net.davidvoid.thor.lightning.entity.Item;
 
+import org.bson.Document;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,9 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
+import com.mongodb.client.MongoCollection;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
@@ -46,15 +48,15 @@ public class ItemStoreTest {
     @Autowired
     ItemStore store = null;
 
-    DBCollection collection = null;
+    MongoCollection<Document> collection = null;
 
     @Before
     public void setUp() throws Exception {
         collection = source.getDatabase().getCollection("item");
 
         for (String json : DATA_FIXTURE) {
-            DBObject object = (DBObject) JSON.parse(json);
-            collection.insert(object);
+            Document object = Document.parse(json);
+            collection.insertOne(object);
         }
     }
 
@@ -188,7 +190,7 @@ public class ItemStoreTest {
         assertEquals(7, collection.count());
         
         
-        DBObject object = collection.findOne(new BasicDBObject("last_update", date));
+        Document object = collection.find(new BasicDBObject("last_update", date)).first();
         assertNotNull(object);
         assertEquals("on constructing a robust distribute system", object.get("name"));
         assertEquals(1L, object.get("feed_id"));
@@ -243,7 +245,7 @@ public class ItemStoreTest {
         store.update(item);
         
         assertEquals(6, collection.count());
-        DBObject object = collection.findOne(new BasicDBObject("id", item.getId()));
+        Document object = collection.find(new BasicDBObject("id", item.getId())).first();
         assertNotNull(object);
         assertEquals("1234", object.get("author"));
     }
@@ -271,7 +273,7 @@ public class ItemStoreTest {
         store.delete(item);
         
         assertEquals(5, collection.count());
-        DBObject object = collection.findOne(new BasicDBObject("id", item.getId()));
+        Document object = collection.find(new BasicDBObject("id", item.getId())).first();
         assertNull(object);
     }
 

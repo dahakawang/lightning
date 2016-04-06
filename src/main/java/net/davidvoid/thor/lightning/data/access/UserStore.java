@@ -3,11 +3,13 @@ package net.davidvoid.thor.lightning.data.access;
 import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.User;
 
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.stereotype.Component;
+
 import static org.springframework.util.Assert.*;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 
 /**
  * Created by david on 3/21/16. {_id: XXXX, id: long, name: string, password:
@@ -36,11 +38,11 @@ public class UserStore extends AbstractStore {
     }
 
     @Override
-    protected DBObject toDBObject(Entity entity) {
+    protected Document toDocument(Entity entity) {
         assert entity != null;
         
         User user = (User) entity;
-        BasicDBObject object = new BasicDBObject("name", user.getName());
+        Document object = new Document("name", user.getName());
         if (user.has_valid_id())
             object.put("id", user.getId());
         object.put("password", user.getPassword());
@@ -49,7 +51,7 @@ public class UserStore extends AbstractStore {
     }
 
     @Override
-    protected Entity toEntity(DBObject object) {
+    protected Entity toEntity(Document object) {
         assert object != null;
         
         User user = new User();
@@ -61,7 +63,7 @@ public class UserStore extends AbstractStore {
     }
 
     @Override
-    protected DBObject getModifyQuery(Entity entity) {
+    protected Bson getModifyQuery(Entity entity) {
         assert entity != null;
         
         User user = (User) entity;

@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.github.fakemongo.Fongo;
-import com.mongodb.DB;
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 
 /**
  * Created by david on 3/22/16.
@@ -22,7 +22,7 @@ public class UnitTestDataSource implements MongoDataSource {
     }
 
     @Override
-    public DB getDatabase() {
-        return fongo.getDB("test");
+    public MongoDatabase getDatabase() {
+        return fongo.getDatabase("test");
     }
 }

@@ -13,6 +13,7 @@ import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.Group;
 import net.davidvoid.thor.lightning.entity.User;
 
+import org.bson.Document;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,9 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
+import com.mongodb.client.MongoCollection;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
@@ -53,8 +52,8 @@ public class GroupStoreTest {
     @Autowired
     GroupStore group_store = null;
 
-    DBCollection user_col = null;
-    DBCollection group_col = null;
+    MongoCollection<Document> user_col = null;
+    MongoCollection<Document> group_col = null;
 
     @Before
     public void setUp() throws Exception {
@@ -62,13 +61,13 @@ public class GroupStoreTest {
         group_col = source.getDatabase().getCollection("group");
 
         for (String json : USER_DATA_FIXTURE) {
-            DBObject object = (DBObject) JSON.parse(json);
-            user_col.insert(object);
+            Document object = Document.parse(json);
+            user_col.insertOne(object);
         }
 
         for (String json : GROUP_DATA_FIXTURE) {
-            DBObject object = (DBObject) JSON.parse(json);
-            group_col.insert(object);
+            Document object = Document.parse(json);
+            group_col.insertOne(object);
         }
     }
 
@@ -120,7 +119,7 @@ public class GroupStoreTest {
 
     @Test
     public void Add_WithValidUser_WillInsert() {
-        group_col.remove(null);
+        group_col.deleteMany(new Document());
         assertEquals(0, group_col.count());
         
         User user = user_store.getByName("david");
@@ -131,7 +130,7 @@ public class GroupStoreTest {
         group_store.add(group);
         
         assertEquals(1, group_col.count());
-        DBObject obj = group_col.findOne();
+        Document obj = group_col.find().first();
         assertEquals(user.getId(), obj.get("user_id"));
         assertEquals("group1", obj.get("name"));
         assertTrue(group.has_valid_id());
@@ -139,7 +138,7 @@ public class GroupStoreTest {
 
     @Test
     public void Add_WithInvalidUser_WillThrow() {
-        group_col.remove(null);
+        group_col.deleteMany(new Document());
         assertEquals(0, group_col.count());
         
         User user = user_store.getByName("david");
@@ -234,7 +233,7 @@ public class GroupStoreTest {
         group.setName("pipe");
         group_store.update(group);
         
-        DBObject obj = group_col.findOne(new BasicDBObject("id", group.getId()));
+        Document obj = group_col.find(new BasicDBObject("id", group.getId())).first();
         assertNotNull(obj);
         assertEquals("pipe", obj.get("name"));
     }
