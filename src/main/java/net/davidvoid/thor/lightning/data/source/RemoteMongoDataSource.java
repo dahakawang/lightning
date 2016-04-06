@@ -28,13 +28,13 @@ public class RemoteMongoDataSource implements MongoDataSource {
     }
 
     private MongoClient createInstance() {
-        MongoCredential credentail = MongoCredential.createCredential("admin", "admin", "admin1".toCharArray());
-        return new MongoClient(new ServerAddress("vm-4538-9e7c.nam.nsroot.net:32017"), Arrays.asList(credentail));
+        MongoCredential credential = MongoCredential.createCredential("admin", "admin", "admin1".toCharArray());
+        return new MongoClient(new ServerAddress("vm-4538-9e7c.nam.nsroot.net:32017"), Arrays.asList(credential));
     }
 
     @Override
     public MongoDatabase getDatabase() {
-        return mongo.getDatabase("test");
+        return getClient().getDatabase("test");
     }
 
 }
