@@ -11,6 +11,7 @@ import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.User;
 import net.davidvoid.thor.lightning.exception.ResourceNotFoundException;
 
+import org.bson.Document;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,9 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
+import com.mongodb.client.MongoCollection;
 
 /**
  * Created by david on 3/22/16.
@@ -46,11 +45,11 @@ public class UserStoreTest {
 
     @Before
     public void setUp() throws Exception {
-        DBCollection collection = source.getDatabase().getCollection("user");
+        MongoCollection<Document> collection = source.getDatabase().getCollection("user");
 
         for (String json : DATA_FIXTURE) {
-            DBObject object = (DBObject) JSON.parse(json);
-            collection.insert(object);
+            Document object = Document.parse(json);
+            collection.insertOne(object);
         }
     }
 
@@ -64,7 +63,7 @@ public class UserStoreTest {
         User user = store.getUser();
         assertNotNull(user);
         
-        source.getDatabase().getCollection("user").remove(null);
+        source.getDatabase().getCollection("user").deleteMany(new Document());
         
         try {
             user = store.getUser();
@@ -118,8 +117,8 @@ public class UserStoreTest {
 
     @Test
     public void Add_NewUsers_WillSuccess() throws Exception {
-        DBCollection collection = source.getDatabase().getCollection("user");
-        collection.remove(null);
+        MongoCollection<Document> collection = source.getDatabase().getCollection("user");
+        collection.deleteMany(new Document());
 
         assertEquals(0, collection.count());
 
@@ -137,16 +136,16 @@ public class UserStoreTest {
 
         assertEquals(2, collection.count());
 
-        DBObject object1 = collection
-                .findOne(new BasicDBObject("name", "david"));
+        Document object1 = collection
+                .find(new BasicDBObject("name", "david")).first();
         assertNotNull(object1);
         assertEquals("david", object1.get("name"));
         assertEquals("123", object1.get("password"));
         isInstanceOf(Long.class, object1.get("id"));
         assertEquals(4, object1.keySet().size());
 
-        DBObject object2 = collection
-                .findOne(new BasicDBObject("name", "kevin"));
+        Document object2 = collection
+                .find(new BasicDBObject("name", "kevin")).first();
         assertNotNull(object2);
         assertEquals("kevin", object2.get("name"));
         assertEquals("456", object2.get("password"));
@@ -160,8 +159,8 @@ public class UserStoreTest {
 
     @Test
     public void Add_SavedUsers_WillNotInsertAndThrow() {
-        DBCollection collection = source.getDatabase().getCollection("user");
-        collection.remove(null);
+        MongoCollection<Document> collection = source.getDatabase().getCollection("user");
+        collection.deleteMany(new Document());
 
         User user1 = new User();
         user1.setName("david");
@@ -179,7 +178,7 @@ public class UserStoreTest {
 
     @Test
     public void Delete_ExistingUser_WillSuccess() throws Exception {
-        DBCollection collection = source.getDatabase().getCollection("user");
+        MongoCollection<Document> collection = source.getDatabase().getCollection("user");
 
         assertEquals(4, collection.count());
         User user1 = store.getByName("david");
@@ -187,15 +186,15 @@ public class UserStoreTest {
 
         assertEquals(3, collection.count());
 
-        DBObject object = collection
-                .findOne(new BasicDBObject("name", "david"));
+        Document object = collection
+                .find(new BasicDBObject("name", "david")).first();
         assertNull(object);
 
     }
 
     @Test
     public void Delete_byId_WillSuccess() {
-        DBCollection collection = source.getDatabase().getCollection("user");
+        MongoCollection<Document> collection = source.getDatabase().getCollection("user");
         assertEquals(4, collection.count());
 
         User user = new User();
@@ -203,14 +202,14 @@ public class UserStoreTest {
         store.delete(user);
         assertEquals(3, collection.count());
 
-        DBObject object = collection
-                .findOne(new BasicDBObject("name", "kevin"));
+        Document object = collection
+                .find(new BasicDBObject("name", "kevin")).first();
         assertNull(object);
     }
 
     @Test
     public void Delete_byIdSeveralTimes_FirstWillSuccessRemainWillHaveNoEffects() {
-        DBCollection collection = source.getDatabase().getCollection("user");
+        MongoCollection<Document> collection = source.getDatabase().getCollection("user");
         assertEquals(4, collection.count());
 
         User user = new User();
@@ -226,14 +225,14 @@ public class UserStoreTest {
         store.delete(user);
         assertEquals(3, collection.count());
 
-        DBObject object = collection
-                .findOne(new BasicDBObject("name", "kevin"));
+        Document object = collection
+                .find(new BasicDBObject("name", "kevin")).first();
         assertNull(object);
     }
 
     @Test
     public void Delete_InvalidUser_WillThrow() {
-        DBCollection collection = source.getDatabase().getCollection("user");
+        MongoCollection<Document> collection = source.getDatabase().getCollection("user");
 
         assertEquals(4, collection.count());
 
@@ -251,7 +250,7 @@ public class UserStoreTest {
 
     @Test
     public void Delete_UserSeveralTimes_WillThrow() {
-        DBCollection collection = source.getDatabase().getCollection("user");
+        MongoCollection<Document> collection = source.getDatabase().getCollection("user");
         assertEquals(4, collection.count());
 
         User user = store.getByName("david");

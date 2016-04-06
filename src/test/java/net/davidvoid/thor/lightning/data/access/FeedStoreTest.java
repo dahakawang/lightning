@@ -1,15 +1,19 @@
 package net.davidvoid.thor.lightning.data.access;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import net.davidvoid.thor.lightning.config.RootConfig;
 import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.Feed;
 import net.davidvoid.thor.lightning.entity.FeedRelation;
 
+import org.bson.Document;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,13 +23,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.MongoCollection;
 
 /**
  * Created by david on 3/23/16.
@@ -48,14 +47,14 @@ public class FeedStoreTest {
     @Autowired
     FeedStore store = null;
 
-    DBCollection collection = null;
+    MongoCollection<Document> collection = null;
 
     @Before
     public void setUp() throws Exception {
         collection = source.getDatabase().getCollection("feed");
 
         for (String json : FEED_DATA_FIXTURE) {
-            collection.insert((DBObject) JSON.parse(json));
+            collection.insertOne(Document.parse(json));
         }
     }
 
@@ -108,7 +107,7 @@ public class FeedStoreTest {
 
     @Test
     public void Add_Feeds_WillSuccess() throws Exception {
-        collection.remove(null);
+        collection.deleteMany(new Document());
 
         Date date = new Date();
         Feed feed = new Feed();
@@ -119,7 +118,7 @@ public class FeedStoreTest {
         store.add(feed);
 
         assertEquals(1, collection.count());
-        DBObject object = collection.findOne();
+        Document object = collection.find().first();
         assertEquals(5, object.keySet().size());
         assertEquals("desc", object.get("description"));
         assertEquals("www.baidu.com", object.get("url"));
@@ -148,7 +147,7 @@ public class FeedStoreTest {
 
         assertEquals(3, collection.count());
 
-        DBObject object = collection.findOne(new BasicDBObject("id", 1L));
+        Document object = collection.find(new BasicDBObject("id", 1L)).first();
         assertEquals("", object.get("description"));
         assertEquals("", object.get("url"));
         assertEquals(date, object.get("last_update"));

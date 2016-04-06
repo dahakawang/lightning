@@ -10,11 +10,12 @@ import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.Feed;
 import net.davidvoid.thor.lightning.entity.FeedRelation;
 
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 
 /**
  * Created by david on 3/22/16. feed collection:
@@ -30,7 +31,7 @@ public class FeedStore extends AbstractStore {
     public List<Feed> getFeeds(List<FeedRelation> list) {
         notNull(list);
 
-        DBObject query = get_query(list);
+        Bson query = get_query(list);
         return inject_relations((List<Feed>) (List<?>) get(query), list);
     }
 
@@ -48,7 +49,7 @@ public class FeedStore extends AbstractStore {
         return list;
     }
 
-    private DBObject get_query(List<FeedRelation> list) {
+    private Bson get_query(List<FeedRelation> list) {
         assert list != null;
 
         BasicDBList id_list = get_id_list(list);
@@ -67,11 +68,11 @@ public class FeedStore extends AbstractStore {
     }
 
     @Override
-    protected DBObject toDBObject(Entity entity) {
+    protected Document toDocument(Entity entity) {
         assert entity != null;
 
         Feed feed = (Feed) entity;
-        BasicDBObject object = new BasicDBObject("id", feed.getId());
+        Document object = new Document("id", feed.getId());
         object.put("description", feed.getDescription());
         object.put("url", feed.getUrl());
         object.put("last_update", feed.getLastUpdate());
@@ -80,7 +81,7 @@ public class FeedStore extends AbstractStore {
     }
 
     @Override
-    protected Entity toEntity(DBObject object) {
+    protected Entity toEntity(Document object) {
         assert object != null;
 
         Feed feed = new Feed();
@@ -93,7 +94,7 @@ public class FeedStore extends AbstractStore {
     }
 
     @Override
-    protected DBObject getModifyQuery(Entity entity) {
+    protected Bson getModifyQuery(Entity entity) {
         assert entity != null;
 
         Feed feed = (Feed) entity;

@@ -1,5 +1,8 @@
 package net.davidvoid.thor.lightning.data.access;
 
+import static org.springframework.util.Assert.isTrue;
+import static org.springframework.util.Assert.notNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,12 +10,13 @@ import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.exception.ResourceNotFoundException;
 
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.springframework.util.Assert.*;
 
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.UpdateOptions;
 
 public abstract class AbstractStore {
     @Autowired
@@ -27,8 +31,8 @@ public abstract class AbstractStore {
                 "the entity to be saved should not have a valid id");
 
         generateId(entity);
-        DBObject object = toDBObject(entity);
-        getCollection().insert(object);
+        Document object = toDocument(entity);
+        getCollection().insertOne(object);
     }
 
     final public void delete(Entity entity) {
@@ -36,8 +40,8 @@ public abstract class AbstractStore {
         isTrue(entity.has_valid_id(),
                 "the entity to be deleted should have a valid id");
 
-        DBObject query = getModifyQuery(entity);
-        getCollection().remove(query);
+        Bson query = getModifyQuery(entity);
+        getCollection().deleteOne(query);
         entity.setInvalidId();
     }
 
@@ -46,40 +50,42 @@ public abstract class AbstractStore {
         isTrue(entity.has_valid_id(),
                 "the entity to be updated should have a valid id");
 
-        DBObject query = getModifyQuery(entity);
-        DBObject update = toDBObject(entity);
-        getCollection().update(query, update, false, true);
+        Bson query = getModifyQuery(entity);
+        Document update = toDocument(entity);
+        UpdateOptions options = new UpdateOptions();
+        options.upsert(false);
+        getCollection().replaceOne(query, update, options);
     }
 
-    final protected long count(DBObject query) {
+    final protected long count(Bson query) {
         assert query != null : "mongodb query should be be null";
 
-        return getCollection().find(query).count();
+        return getCollection().count(query);
     }
 
 
-    final protected List<Entity> get(DBObject query, DBObject sort, int offset, int count) {
+    final protected List<Entity> get(Bson query, Bson sort, int offset, int count) {
         assert query != null : "mongodb query should be be null";
 
-        DBCursor cursor = getCollection().find(query).sort(sort).skip(offset).limit(count);
+        MongoCursor<Document> cursor = getCollection().find(query).sort(sort).skip(offset).limit(count).iterator();
         return retrieveAll(cursor);
     }
 
-    final protected List<Entity> get(DBObject query, DBObject sort) {
+    final protected List<Entity> get(Bson query, Bson sort) {
         assert query != null : "mongodb query should be be null";
 
-        DBCursor cursor = getCollection().find(query).sort(sort);
+        MongoCursor<Document> cursor = getCollection().find(query).sort(sort).iterator();
         return retrieveAll(cursor);
     }
 
-    final protected List<Entity> get(DBObject query) {
+    final protected List<Entity> get(Bson query) {
         assert query != null : "mongodb query should be be null";
 
-        DBCursor cursor = getCollection().find(query);
+        MongoCursor<Document> cursor = getCollection().find(query).iterator();
         return retrieveAll(cursor);
     }
 
-    final protected List<Entity> retrieveAll(DBCursor cursor) {
+    final protected List<Entity> retrieveAll(MongoCursor<Document> cursor) {
         ArrayList<Entity> list = new ArrayList<Entity>();
         while (cursor.hasNext()) {
             Entity entity = toEntity(cursor.next());
@@ -88,10 +94,10 @@ public abstract class AbstractStore {
         return list;
     }
 
-    final protected Entity getOne(DBObject query) {
+    final protected Entity getOne(Bson query) {
         assert query != null : "mongodb query should be be null";
 
-        DBObject object = getCollection().findOne(query);
+        Document object = getCollection().find(query).first();
         if (object == null)
             throw new ResourceNotFoundException("resource not found in db");
 
@@ -105,7 +111,7 @@ public abstract class AbstractStore {
         return counter.getNextId(name);
     }
 
-    final protected DBCollection getCollection() {
+    final protected MongoCollection<Document> getCollection() {
         assert getCollectionName() != null : "getCollectionName should not return null";
         assert !getCollectionName().isEmpty() : "getCollectionName should not return empty";
 
@@ -119,11 +125,11 @@ public abstract class AbstractStore {
         entity.setId(generateNextId(getCollectionName()));
     }
 
-    protected abstract DBObject toDBObject(Entity entity);
+    protected abstract Document toDocument(Entity entity);
 
-    protected abstract Entity toEntity(DBObject object);
+    protected abstract Entity toEntity(Document object);
 
-    protected abstract DBObject getModifyQuery(Entity entity);
+    protected abstract Bson getModifyQuery(Entity entity);
 
     protected abstract String getCollectionName();
 }

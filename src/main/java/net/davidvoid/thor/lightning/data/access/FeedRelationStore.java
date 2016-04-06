@@ -6,12 +6,14 @@ import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.FeedRelation;
 import net.davidvoid.thor.lightning.entity.Group;
 
+import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.stereotype.Component;
+
 import static org.springframework.util.Assert.isTrue;
 import static org.springframework.util.Assert.notNull;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 
 /**
  * Created by david on 3/21/16.
@@ -41,10 +43,10 @@ public class FeedRelationStore extends AbstractStore {
     }
 
     @Override
-    protected DBObject toDBObject(Entity entity) {
+    protected Document toDocument(Entity entity) {
         FeedRelation feed = (FeedRelation) entity;
 
-    	BasicDBObject object = new BasicDBObject("id", feed.getId());
+    	Document object = new Document("id", feed.getId());
     	object.put("group_id", feed.getGroupId());
     	object.put("feed_id", feed.getFeedId());
     	object.put("name", feed.getName());
@@ -53,7 +55,7 @@ public class FeedRelationStore extends AbstractStore {
     }
 
     @Override
-    protected Entity toEntity(DBObject object) {
+    protected Entity toEntity(Document object) {
 		FeedRelation relation = new FeedRelation();
 		relation.setId((Long)object.get("id"));
         relation.setGroupId((Long) object.get("group_id"));
@@ -64,7 +66,7 @@ public class FeedRelationStore extends AbstractStore {
     }
 
     @Override
-    protected DBObject getModifyQuery(Entity entity) {
+    protected Bson getModifyQuery(Entity entity) {
         FeedRelation feed = (FeedRelation) entity;
 
         return new BasicDBObject("id", feed.getId());

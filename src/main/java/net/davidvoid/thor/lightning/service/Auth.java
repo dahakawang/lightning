@@ -27,7 +27,7 @@ public class Auth {
     
     synchronized public void register(String name, String token) {
         ensureUserLoaded();
-        if (name != null) throw new DuplicateUserException("the user already registered");
+        if (user != null) throw new DuplicateUserException("the user already registered");
         
         User user = new User();
         user.setName(name);
