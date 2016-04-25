@@ -17,11 +17,6 @@ public class UserService {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String welcome(HttpServletRequest req) {
-	    Enumeration<String> it = req.getAttributeNames();
-	    while (it.hasMoreElements()) {
-	        String name = it.nextElement();
-	        System.out.println(name + " = " + req.getAttribute(name));
-	    }
 		return "hello world";
 	}
 	
