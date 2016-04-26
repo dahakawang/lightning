@@ -16,17 +16,17 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    public JwtAuthenticationFilter() {
-        super("/**");
+    public JwtAuthenticationFilter(String defaultFilterProcessesUrl) {
+        super(defaultFilterProcessesUrl);
     }
 
-    @Override
-    protected boolean requiresAuthentication(HttpServletRequest request,
-            HttpServletResponse response) {
-        return true;
+    protected JwtAuthenticationFilter(
+            RequestMatcher requiresAuthenticationRequestMatcher) {
+        super(requiresAuthenticationRequestMatcher);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
         
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("USER"));
-        UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken("david", "123", authorities);
+        UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken("david", "123"); //, authorities);
         return user;
     }
 
