@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.davidvoid.thor.lightning.security.JwtAuthenticationFilter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,19 +19,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private JwtAuthenticationFilter filter = null;
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter("/**");
-        filter.setAuthenticationSuccessHandler(new AuthenticationSuccessHandler() {
-            @Override
-            public void onAuthenticationSuccess(HttpServletRequest request,
-                    HttpServletResponse response, Authentication authentication)
-                    throws IOException, ServletException {
-                
-            }});
 
-        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+        http.authorizeRequests().anyRequest().authenticated()
+                .antMatchers("/users/**").permitAll().and()
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
     
 }
