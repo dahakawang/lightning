@@ -8,4 +8,7 @@ public class UnauthorizedAccessException extends ThorException {
         super(msg);
     }
 
+    public UnauthorizedAccessException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

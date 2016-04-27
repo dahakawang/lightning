@@ -8,4 +8,7 @@ public class ThorException extends RuntimeException {
         super(msg);
     }
 
+    public ThorException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }
