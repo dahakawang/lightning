@@ -25,20 +25,22 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse res = (HttpServletResponse) response;
-
         try {
+            HttpServletRequest req = (HttpServletRequest) request;
+            HttpServletResponse res = (HttpServletResponse) response;
+
             Authentication authentication = attemptAuthentication(req, res);
             if (authentication != null) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
+            chain.doFilter(request, response);
+
         } catch (AuthenticationException e) {
-            res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed: " + e.getMessage());
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed: " + e.getMessage());
         }
 
-        chain.doFilter(request, response);
+        return;
     }
 
     private Authentication attemptAuthentication(HttpServletRequest request,
