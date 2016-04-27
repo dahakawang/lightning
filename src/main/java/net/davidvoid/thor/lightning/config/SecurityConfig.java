@@ -1,6 +1,6 @@
 package net.davidvoid.thor.lightning.config;
 
-import net.davidvoid.thor.lightning.security.JwtAuthenticationFilter;
+import net.davidvoid.thor.lightning.service.security.JwtAuthenticationFilter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
