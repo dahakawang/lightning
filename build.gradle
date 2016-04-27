@@ -28,6 +28,7 @@ dependencies {
     compile 'javax.servlet:javax.servlet-api:3.1.0'
     compile 'org.mongodb:mongodb-driver:3.2.2'
     compile 'ch.qos.logback:logback-classic:1.1.6'
+    compile 'io.jsonwebtoken:jjwt:0.6.0'
 
 
     def tomcatVersion = '7.0.59'
