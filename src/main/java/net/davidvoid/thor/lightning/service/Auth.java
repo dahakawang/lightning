@@ -25,13 +25,13 @@ public class Auth {
         }
     }
     
-    synchronized public void register(String name, String token) {
+    synchronized public void register(String name, String password) {
         ensureUserLoaded();
         if (user != null) throw new DuplicateUserException("the user already registered");
         
         User user = new User();
         user.setName(name);
-        user.setPassword(token);
+        user.setPassword(password);
         store.add(user);
         this.user = user;
     }
