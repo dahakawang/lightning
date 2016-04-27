@@ -6,6 +6,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,13 +46,22 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private Authentication attemptAuthentication(HttpServletRequest request,
                                                  HttpServletResponse response) {
-        String header = request.getHeader("Authorization");
-
-        if (header == null || !header.startsWith("Bearer ")) {
-            return null;
-        }
-
-        String jwt_token = header.substring(7);
+        String jwt_token = findToken(request);
+        if (jwt_token == null) return null;
+        
         return jwtService.authenticate(jwt_token);
+    }
+
+    private String findToken(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return null;
+        
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("jwt-token")) {
+                return cookie.getValue();
+            }
+        }
+        
+        return null;
     }
 }
