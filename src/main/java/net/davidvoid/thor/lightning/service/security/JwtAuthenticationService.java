@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import net.davidvoid.thor.lightning.exception.UnauthorizedAccessException;
+import net.davidvoid.thor.lightning.exception.AuthenticationException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,13 +49,13 @@ public class JwtAuthenticationService {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             String username = claims.getBody().getSubject();
-            if (username == null) throw new UnauthorizedAccessException("no subject present");
+            if (username == null) throw new AuthenticationException("no subject present");
 
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, "");
             return token;
 
         } catch (JwtException e) {
-            throw new UnauthorizedAccessException("invalid JWT token", e);
+            throw new AuthenticationException("invalid JWT token", e);
         }
     }
     

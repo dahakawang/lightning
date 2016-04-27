@@ -4,7 +4,7 @@ import net.davidvoid.thor.lightning.data.access.UserStore;
 import net.davidvoid.thor.lightning.entity.User;
 import net.davidvoid.thor.lightning.exception.DuplicateUserException;
 import net.davidvoid.thor.lightning.exception.ResourceNotFoundException;
-import net.davidvoid.thor.lightning.exception.UnauthorizedAccessException;
+import net.davidvoid.thor.lightning.exception.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class Auth {
         ensureUserLoaded();
 
         if (user == null || !token.equals(this.user.getPassword())) {
-            throw new UnauthorizedAccessException("incorrect credential provided");
+            throw new AuthenticationException("incorrect credential provided");
         }
     }
     
