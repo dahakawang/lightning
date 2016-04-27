@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.davidvoid.thor.lightning.exception.AuthenticationException;
 
@@ -17,6 +19,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 /**
@@ -51,7 +55,9 @@ public class JwtAuthenticationService {
             String username = claims.getBody().getSubject();
             if (username == null) throw new AuthenticationException("no subject present");
 
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, "");
+            List<GrantedAuthority> roles = new ArrayList<>();
+            roles.add(new SimpleGrantedAuthority("USER"));
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, "", roles);
             return token;
 
         } catch (JwtException e) {
