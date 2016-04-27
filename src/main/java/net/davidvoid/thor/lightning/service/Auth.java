@@ -16,12 +16,12 @@ public class Auth {
 
     volatile User user = null;
     
-    
-    public void authenticate(String token) {
+    public void authenticate(String username, String password) {
         ensureUserLoaded();
 
-        if (user == null || !token.equals(this.user.getPassword())) {
-            throw new AuthenticationException("incorrect credential provided");
+        if (user == null || !username.equals(this.user.getName())
+                || !password.equals(this.user.getPassword())) {
+            throw new AuthenticationException("failed to authenticate user");
         }
     }
     
