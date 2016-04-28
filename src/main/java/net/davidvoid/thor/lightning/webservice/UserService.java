@@ -4,10 +4,14 @@ import net.davidvoid.thor.lightning.service.Auth;
 import net.davidvoid.thor.lightning.service.security.JwtAuthenticationService;
 import net.davidvoid.thor.lightning.util.HttpRequestAssertion;
 import net.davidvoid.thor.lightning.util.MapLiteral;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,12 +47,18 @@ public class UserService {
     }
 
     @RequestMapping(value = "/{username}/login", method = RequestMethod.POST)
-    public Map<String, Object> login(@PathVariable String username, @RequestBody Map<String, Object> user) {
+    public void login(HttpServletResponse reponse, @PathVariable String username, @RequestBody Map<String, Object> user) {
         isTrue(user.size() == 1, "malformed model");
         assertStringNotEmpty(user.get("password"), "password should be given as string");
 
         String token = jwtService.getToken(username);
-        return MapLiteral.map("jwt-token", token);
+        addToCookie(reponse, token);
+    }
+
+    private void addToCookie(HttpServletResponse reponse, String token) {
+        Cookie cookie = new Cookie("jwt-token", token);
+        cookie.setHttpOnly(true);
+        reponse.addCookie(cookie);
     }
 
     @RequestMapping(value = "/{username}/logout", method = RequestMethod.POST)
