@@ -14,46 +14,37 @@ public class Auth {
     @Autowired
     UserStore store = null;
 
-    volatile User user = null;
-    
-    public void authenticate(String username, String password) {
-        ensureUserLoaded();
+    public User authenticate(String username, String password) {
+        User user = retrieve_user();
 
-        if (user == null || !username.equals(this.user.getName())
-                || !password.equals(this.user.getPassword())) {
+        if (user == null || !username.equals(user.getName())
+                || !password.equals(user.getPassword())) {
             throw new AuthenticationException("failed to authenticate user");
         }
+        
+        return user;
     }
     
-    synchronized public void register(String name, String password) {
-        ensureUserLoaded();
+    synchronized public User register(String name, String password) {
+        User user = retrieve_user();
         if (user != null) throw new DuplicateUserException("the user already registered");
         
-        User user = new User();
+        user = new User();
         user.setName(name);
         user.setPassword(password);
         store.add(user);
-        this.user = user;
-    }
-
-    public User getUser() {
-        ensureUserLoaded();
+        
         return user;
     }
 
-    private void ensureUserLoaded() {
-        // double checked locking with volatile variable
-        if (user == null) {
-            synchronized(this) {
-                if (user == null) {
-                    user = retrieve_token();
-                }
-            }
-            
-        }
+    public User getUser(String username) {
+        User user = retrieve_user();
+        if (user == null || !user.getName().equals(username)) throw new ResourceNotFoundException("the user dose not exists");
+        
+        return user;
     }
 
-    private User retrieve_token() {
+    private User retrieve_user() {
         try {
             User user = store.getUser();
             return user;

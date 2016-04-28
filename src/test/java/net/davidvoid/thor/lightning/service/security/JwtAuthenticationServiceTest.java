@@ -2,6 +2,7 @@ package net.davidvoid.thor.lightning.service.security;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import net.davidvoid.thor.lightning.entity.User;
 import net.davidvoid.thor.lightning.exception.AuthenticationException;
 
 import org.junit.Test;
@@ -22,7 +23,11 @@ public class JwtAuthenticationServiceTest {
     @Test
     public void Authenticate_GivenValid_WillSuccess() {
         JwtAuthenticationService service = new JwtAuthenticationService();
-        String jwtToken = service.getToken("david");
+        User user = new User();
+        user.setName("david");
+        user.setId(1);
+
+        String jwtToken = service.getToken(user);
         Authentication auth = service.authenticate(jwtToken);
         assertEquals("david", auth.getName());
         assertEquals("david", auth.getPrincipal());
