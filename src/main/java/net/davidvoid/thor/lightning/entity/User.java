@@ -1,11 +1,14 @@
 package net.davidvoid.thor.lightning.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by david on 3/20/16.
  */
 public class User implements Entity {
     private long id = -1;
     private String name = "";
+    @JsonIgnore
     private String password = "";
 
     public String getPassword() {
