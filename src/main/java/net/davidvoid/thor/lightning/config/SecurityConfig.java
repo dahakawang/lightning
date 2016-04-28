@@ -3,6 +3,7 @@ package net.davidvoid.thor.lightning.config;
 import net.davidvoid.thor.lightning.service.security.JwtAuthenticationFilter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -21,7 +22,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/users/*/login").permitAll().antMatchers("/users/*/logout").permitAll()
+                .antMatchers(HttpMethod.PUT, "/users/*/").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/*/login", "/users/*/logout").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
