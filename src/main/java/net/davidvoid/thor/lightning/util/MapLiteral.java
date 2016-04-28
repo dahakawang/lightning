@@ -1,12 +1,9 @@
 package net.davidvoid.thor.lightning.util;
 
-import org.springframework.util.Assert;
+import static org.springframework.util.Assert.isTrue;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-
-import static org.springframework.util.Assert.isTrue;
 
 /**
  * Created by david on 4/27/16.
