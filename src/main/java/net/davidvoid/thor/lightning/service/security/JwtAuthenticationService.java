@@ -58,9 +58,10 @@ public class JwtAuthenticationService {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             String username = claims.getBody().getSubject();
-            if (username == null) throw new AuthenticationException("no subject present");
+            if (username == null) throw new AuthenticationException("no subject field present");
             
             Date issuedDate = claims.getBody().getIssuedAt();
+            if (issuedDate == claims) throw new AuthenticationException("no issued at field present");
             Date current = new Date();
             long offset = current.getTime() - issuedDate.getTime();
             if (offset < 0 || offset > EXPIRATION_TIME) throw new AuthenticationException("token expired");
