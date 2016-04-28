@@ -2,9 +2,9 @@ package net.davidvoid.thor.lightning.service;
 
 import net.davidvoid.thor.lightning.data.access.UserStore;
 import net.davidvoid.thor.lightning.entity.User;
+import net.davidvoid.thor.lightning.exception.AuthenticationException;
 import net.davidvoid.thor.lightning.exception.DuplicateUserException;
 import net.davidvoid.thor.lightning.exception.ResourceNotFoundException;
-import net.davidvoid.thor.lightning.exception.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,15 +25,23 @@ public class Auth {
         return user;
     }
     
-    synchronized public User register(String name, String password) {
+    public User update(String username, String password) {
+        User user = retrieve_user();
+        if (user == null || !user.getName().equals(username)) throw new ResourceNotFoundException("user dose not exists");
+
+        user.setPassword(password);
+        store.update(user);
+        return user;
+    }
+
+    public User register(String name, String password) {
         User user = retrieve_user();
         if (user != null) throw new DuplicateUserException("the user already registered");
-        
+
         user = new User();
         user.setName(name);
         user.setPassword(password);
         store.add(user);
-        
         return user;
     }
 
