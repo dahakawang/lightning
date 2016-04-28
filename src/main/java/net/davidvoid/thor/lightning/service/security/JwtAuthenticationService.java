@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtAuthenticationService {
     static Log logger = LogFactory.getLog(JwtAuthenticationService.class);
-    static long EXPIRATION_TIME = 20 * 1000;
+    static long EXPIRATION_TIME = 30 * 24 * 60 * 60* 1000;
 
     String secretKey = null;
     
