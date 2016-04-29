@@ -13,11 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import net.davidvoid.thor.lightning.entity.User;
 import net.davidvoid.thor.lightning.service.Auth;
 import net.davidvoid.thor.lightning.service.security.JwtAuthenticationService;
+import net.davidvoid.thor.lightning.util.SessionUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,11 +46,8 @@ public class UserService {
         assertStringNotEmpty(data.get("password"), "password should be give as string");
 
         String password = (String) data.get("password");
-        Authentication authentication = SecurityContextHolder.getContext()
-                .getAuthentication();
-
         User user = null; 
-        if (authentication instanceof AnonymousAuthenticationToken) {
+        if (SessionUser.get().isAnonymous()) {
             user = auth.register(username, password);
         } else {
             assertCurrentUserAs(username);
