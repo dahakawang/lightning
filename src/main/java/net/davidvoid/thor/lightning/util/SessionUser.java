@@ -39,7 +39,7 @@ public class SessionUser {
         return anonymous;
     }
     
-    public long getId() {
+    public Object getId() {
         isTrue(!isAnonymous(), "getid can only be called on non-anonymous users");
 
         return ((ThorAuthentication) authentication).getId();
