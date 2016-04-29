@@ -1,6 +1,8 @@
 package net.davidvoid.thor.lightning.entity;
 
-import static org.springframework.util.Assert.*;
+import static org.junit.Assert.fail;
+import static org.springframework.util.Assert.isTrue;
+import static org.springframework.util.Assert.notNull;
 
 public abstract class Entity {
     Long id = null;
@@ -26,9 +28,14 @@ public abstract class Entity {
 
     public void setId(Object id) {
         notNull(id);
-        isInstanceOf(Long.class, id);
         
-        this.id = (Long) id;
+        if (id instanceof Long) {
+            this.id = (Long) id;
+        } else if (id instanceof Integer) {
+            this.id = ((Integer)id).longValue();
+        }
+        
+        fail();
     }
 
     public void setInvalidId() {
@@ -36,6 +43,6 @@ public abstract class Entity {
     }
     
     public static boolean is_valid_id(Object id) {
-        return id != null && (id instanceof Long);
+        return id != null && ((id instanceof Integer) || (id instanceof Long));
     }
 }
