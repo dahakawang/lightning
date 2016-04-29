@@ -12,9 +12,9 @@ public class ThorAuthentication extends AbstractAuthenticationToken {
     private static final long serialVersionUID = -5044029477635986803L;
 
     private String username = null;
-    private long id = -1;
+    private Object id = -1;
 
-    public ThorAuthentication(String username, long id) {
+    public ThorAuthentication(String username, Object id) {
         super(defaultRoles());
         this.username = username;
         this.id = id;
@@ -28,7 +28,7 @@ public class ThorAuthentication extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-        return null;
+        return "";
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ThorAuthentication extends AbstractAuthenticationToken {
         return username;
     }
     
-    public long getId() {
+    public Object getId() {
         return id;
     }
 
