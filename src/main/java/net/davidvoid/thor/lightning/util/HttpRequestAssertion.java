@@ -1,7 +1,5 @@
 package net.davidvoid.thor.lightning.util;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-
 import net.davidvoid.thor.lightning.exception.AuthorizationException;
 import net.davidvoid.thor.lightning.exception.BadRequestException;
 
@@ -44,8 +42,7 @@ public class HttpRequestAssertion {
     }
 
     public static void assertCurrentUserAs(String username, String msg) {
-        if (!SecurityContextHolder.getContext().getAuthentication().getName()
-                .equals(username))
+        if (!SessionUser.get().getName().equals(username))
             throw new AuthorizationException();
     }
 
