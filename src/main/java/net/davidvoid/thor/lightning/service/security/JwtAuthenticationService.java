@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Map;
 
+import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.User;
 import net.davidvoid.thor.lightning.exception.AuthenticationException;
 import net.davidvoid.thor.lightning.util.MapLiteral;
@@ -61,11 +62,10 @@ public class JwtAuthenticationService {
             long offset = current.getTime() - issuedDate.getTime();
             if (offset < 0 || offset > EXPIRATION_TIME) throw new AuthenticationException("token expired");
             
-            Object uid_obj = (Long) claims.getBody().get("uid");
-            if (uid_obj == null || !(uid_obj instanceof Long)) throw new AuthenticationException("no uid field present");
-            long uid = (long) uid_obj;
+            Object uid_obj = claims.getBody().get("uid");
+            if (uid_obj == null || !Entity.is_valid_id(uid_obj)) throw new AuthenticationException("no uid field present");
 
-            return new ThorAuthentication(username, uid);
+            return new ThorAuthentication(username, uid_obj);
 
         } catch (JwtException e) {
             throw new AuthenticationException("invalid JWT token", e);
