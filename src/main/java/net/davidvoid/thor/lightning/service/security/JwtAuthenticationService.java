@@ -10,9 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import net.davidvoid.thor.lightning.entity.User;
@@ -21,10 +19,7 @@ import net.davidvoid.thor.lightning.util.MapLiteral;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 /**
@@ -65,17 +60,18 @@ public class JwtAuthenticationService {
             Date current = new Date();
             long offset = current.getTime() - issuedDate.getTime();
             if (offset < 0 || offset > EXPIRATION_TIME) throw new AuthenticationException("token expired");
+            
+            Object uid_obj = (Long) claims.getBody().get("uid");
+            if (uid_obj == null || !(uid_obj instanceof Long)) throw new AuthenticationException("no uid field present");
+            long uid = (long) uid_obj;
 
-            List<GrantedAuthority> roles = new ArrayList<>();
-            roles.add(new SimpleGrantedAuthority("USER"));
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, "", roles);
-            return token;
+            return new ThorAuthentication(username, uid);
 
         } catch (JwtException e) {
             throw new AuthenticationException("invalid JWT token", e);
         }
     }
-    
+
     public String getToken(User user) {
         Map<String, Object> additional_claims = MapLiteral.map("uid", user.getId());
 
