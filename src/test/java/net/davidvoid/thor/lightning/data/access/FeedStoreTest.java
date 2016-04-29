@@ -85,7 +85,7 @@ public class FeedStoreTest {
 
         List<Feed> feeds = store.getFeeds(relations);
         assertEquals(3, feeds.size());
-        Collections.sort(feeds, (Feed left, Feed right)->((Long)left.getId()).compareTo(right.getId()));
+        Collections.sort(feeds, (Feed left, Feed right)->((Long)left.getId()).compareTo((Long)right.getId()));
         assertEquals(relations.get(0), feeds.get(0).getRelation());
         assertEquals(relations.get(1), feeds.get(1).getRelation());
         assertEquals(relations.get(2), feeds.get(2).getRelation());

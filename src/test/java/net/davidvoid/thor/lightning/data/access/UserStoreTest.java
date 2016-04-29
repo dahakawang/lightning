@@ -77,7 +77,7 @@ public class UserStoreTest {
         User user = store.getByName("david");
         assertEquals("david", user.getName());
         assertEquals("123", user.getPassword());
-        assertEquals(1, user.getId());
+        assertEquals(1L, user.getId());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class UserStoreTest {
         User user = store.getById(1);
         assertEquals("david", user.getName());
         assertEquals("123", user.getPassword());
-        assertEquals(1, user.getId());
+        assertEquals(1L, user.getId());
     }
 
     @Test
@@ -270,7 +270,7 @@ public class UserStoreTest {
         User user = store.getById(1);
         assertEquals("david", user.getName());
         assertEquals("123", user.getPassword());
-        assertEquals(1, user.getId());
+        assertEquals(1L, user.getId());
 
         user.setName("david1");
         user.setPassword("7788");
@@ -279,7 +279,7 @@ public class UserStoreTest {
         user = store.getById(1);
         assertEquals("david1", user.getName());
         assertEquals("7788", user.getPassword());
-        assertEquals(1, user.getId());
+        assertEquals(1L, user.getId());
 
     }
 

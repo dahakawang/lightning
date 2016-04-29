@@ -83,22 +83,21 @@ public class GroupStoreTest {
         List<Group> groups = group_store.getGroups(user);
 
         assertEquals(3, groups.size());
-        Collections.sort(groups, (Group left, Group right) -> ((Long) left
-                .getId()).compareTo(right.getId()));
+        Collections.sort(groups, (Group left, Group right) -> ((Long) left.getId()).compareTo((Long)right.getId()));
         
         Group g = groups.get(0);
         assertEquals(user, g.getUser());
-        assertEquals(1, g.getId());
+        assertEquals(1L, g.getId());
         assertEquals("Group1", g.getName());
         
         g = groups.get(1);
         assertEquals(user, g.getUser());
-        assertEquals(2, g.getId());
+        assertEquals(2L, g.getId());
         assertEquals("Group2", g.getName());
 
         g = groups.get(2);
         assertEquals(user, g.getUser());
-        assertEquals(3, g.getId());
+        assertEquals(3L, g.getId());
         assertEquals("Group3", g.getName());
         
         user = user_store.getByName("kevin");

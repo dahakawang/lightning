@@ -36,7 +36,7 @@ public class FeedStore extends AbstractStore {
     }
 
     private List<Feed> inject_relations(List<Feed> list, List<FeedRelation> relations) {
-        HashMap<Long, Feed> relation_map = new HashMap<Long, Feed>();
+        HashMap<Object, Feed> relation_map = new HashMap<>();
         for (Feed relation : list) {
             relation_map.put(relation.getId(), relation);
         }

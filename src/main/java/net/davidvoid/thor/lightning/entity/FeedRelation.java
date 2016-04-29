@@ -3,23 +3,12 @@ package net.davidvoid.thor.lightning.entity;
 /**
  * Created by david on 3/20/16.
  */
-public class FeedRelation implements Entity {
-    private long id = -1;
+public class FeedRelation extends Entity {
     private long group_id = -1;
     private long feed_id = -1;
     private String name = null;
     private Group group = null;
 
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
-    }
-    
     public long getGroupId() {
         return group_id;
     }
@@ -42,16 +31,6 @@ public class FeedRelation implements Entity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public boolean has_valid_id() {
-        return id >= 0;
-    }
-
-    @Override
-    public void setInvalidId() {
-        this.id = -1;
     }
 
     public Group getGroup() {

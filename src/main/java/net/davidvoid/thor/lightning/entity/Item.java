@@ -5,8 +5,7 @@ import java.util.Date;
 /**
  * Created by david on 3/20/16.
  */
-public class Item implements Entity {
-    private long id = -1;
+public class Item extends Entity {
     private Feed feed = null;
     private String name = "";
     private String author = "";
@@ -15,16 +14,6 @@ public class Item implements Entity {
     private boolean is_saved = false;
     private boolean is_read = false;
     private Date last_update = null;
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public Feed getFeed() {
         return feed;
@@ -88,15 +77,5 @@ public class Item implements Entity {
 
     public void setLastUpdate(Date last_update) {
         this.last_update = last_update;
-    }
-
-    @Override
-    public boolean has_valid_id() {
-        return this.id >= 0;
-    }
-
-    @Override
-    public void setInvalidId() {
-        this.id = -1;
     }
 }

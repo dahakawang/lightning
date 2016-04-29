@@ -68,19 +68,19 @@ public class FeedRelationStoreTest {
         List<FeedRelation> relations = store.getFeedRelations(group);
         assertEquals(2, relations.size());
         
-        Collections.sort(relations, (FeedRelation left, FeedRelation right)->((Long)left.getId()).compareTo(right.getId()));
+        Collections.sort(relations, (FeedRelation left, FeedRelation right)->((Long)left.getId()).compareTo((Long)right.getId()));
         
         FeedRelation r = relations.get(0);
         assertEquals(2, r.getGroupId());
         assertEquals(2, r.getFeedId());
-        assertEquals(4, r.getId());
+        assertEquals(4L, r.getId());
         assertEquals(group, r.getGroup());
         assertEquals("feed2", r.getName());
         
         r = relations.get(1);
         assertEquals(2, r.getGroupId());
         assertEquals(3, r.getFeedId());
-        assertEquals(5, r.getId());
+        assertEquals(5L, r.getId());
         assertEquals(group, r.getGroup());
         assertEquals("feed3", r.getName());
         

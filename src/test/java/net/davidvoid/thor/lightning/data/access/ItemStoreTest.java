@@ -2,7 +2,6 @@ package net.davidvoid.thor.lightning.data.access;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
@@ -88,46 +87,46 @@ public class ItemStoreTest {
         assertEquals(6, items.size());
         Item item = items.get(0);
         assertEquals(feed, item.getFeed());
-        assertEquals(3, item.getId());
+        assertEquals(3L, item.getId());
         assertEquals("article0", item.getName());
         assertEquals("author3", item.getAuthor());
         assertEquals("content3", item.getContent());
         assertEquals("url3", item.getUrl());
         assertEquals(true, item.isRead());
         assertEquals(true, item.isSaved());
-        assertEquals(3, items.get(0).getId());
-        assertEquals(1, items.get(1).getId());
-        assertEquals(2, items.get(2).getId());
-        assertEquals(6, items.get(3).getId());
-        assertEquals(5, items.get(4).getId());
-        assertEquals(4, items.get(5).getId());
+        assertEquals(3L, items.get(0).getId());
+        assertEquals(1L, items.get(1).getId());
+        assertEquals(2L, items.get(2).getId());
+        assertEquals(6L, items.get(3).getId());
+        assertEquals(5L, items.get(4).getId());
+        assertEquals(4L, items.get(5).getId());
 
         items = store.getItemsFromFeed(feed, 0, 100, FILTER_OPTION.BOTH, SORT_OPTION.BY_NAME_DSC);
         assertEquals(6, items.size());
-        assertEquals(3, items.get(5).getId());
-        assertEquals(1, items.get(4).getId());
-        assertEquals(2, items.get(3).getId());
-        assertEquals(6, items.get(2).getId());
-        assertEquals(5, items.get(1).getId());
-        assertEquals(4, items.get(0).getId());
+        assertEquals(3L, items.get(5).getId());
+        assertEquals(1L, items.get(4).getId());
+        assertEquals(2L, items.get(3).getId());
+        assertEquals(6L, items.get(2).getId());
+        assertEquals(5L, items.get(1).getId());
+        assertEquals(4L, items.get(0).getId());
 
         items = store.getItemsFromFeed(feed, 0, 100, FILTER_OPTION.BOTH, SORT_OPTION.BY_UPDATE_DATE_ASC);
         assertEquals(6, items.size());
-        assertEquals(6, items.get(0).getId());
-        assertEquals(1, items.get(1).getId());
-        assertEquals(3, items.get(2).getId());
-        assertEquals(5, items.get(3).getId());
-        assertEquals(2, items.get(4).getId());
-        assertEquals(4, items.get(5).getId());
+        assertEquals(6L, items.get(0).getId());
+        assertEquals(1L, items.get(1).getId());
+        assertEquals(3L, items.get(2).getId());
+        assertEquals(5L, items.get(3).getId());
+        assertEquals(2L, items.get(4).getId());
+        assertEquals(4L, items.get(5).getId());
 
         items = store.getItemsFromFeed(feed, 0, 100, FILTER_OPTION.BOTH, SORT_OPTION.BY_UPDATE_DATE_DSC);
         assertEquals(6, items.size());
-        assertEquals(6, items.get(5).getId());
-        assertEquals(1, items.get(4).getId());
-        assertEquals(3, items.get(3).getId());
-        assertEquals(5, items.get(2).getId());
-        assertEquals(2, items.get(1).getId());
-        assertEquals(4, items.get(0).getId());
+        assertEquals(6L, items.get(5).getId());
+        assertEquals(1L, items.get(4).getId());
+        assertEquals(3L, items.get(3).getId());
+        assertEquals(5L, items.get(2).getId());
+        assertEquals(2L, items.get(1).getId());
+        assertEquals(4L, items.get(0).getId());
 
         items = store.getItemsFromFeed(feed, 0, 100, FILTER_OPTION.ONLY_READ, SORT_OPTION.BY_NAME_ASC);
         assertEquals(2, items.size());
@@ -136,13 +135,13 @@ public class ItemStoreTest {
 
         items = store.getItemsFromFeed(feed, 0, 2, FILTER_OPTION.BOTH, SORT_OPTION.BY_UPDATE_DATE_DSC);
         assertEquals(2, items.size());
-        assertEquals(4, items.get(0).getId());
-        assertEquals(2, items.get(1).getId());
+        assertEquals(4L, items.get(0).getId());
+        assertEquals(2L, items.get(1).getId());
 
         items = store.getItemsFromFeed(feed, 4, 3, FILTER_OPTION.BOTH, SORT_OPTION.BY_UPDATE_DATE_DSC);
         assertEquals(2, items.size());
-        assertEquals(1, items.get(0).getId());
-        assertEquals(6, items.get(1).getId());
+        assertEquals(1L, items.get(0).getId());
+        assertEquals(6L, items.get(1).getId());
     }
     
     @Test
@@ -269,12 +268,11 @@ public class ItemStoreTest {
         Feed feed = new Feed();
         feed.setId(1);
         Item item = store.getItemsFromFeed(feed).get(0);
+        assertEquals(6, collection.count());
 
         store.delete(item);
         
         assertEquals(5, collection.count());
-        Document object = collection.find(new BasicDBObject("id", item.getId())).first();
-        assertNull(object);
     }
 
     @Test 
