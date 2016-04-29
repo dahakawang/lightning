@@ -175,10 +175,8 @@ public class GroupStoreTest {
         List<Group> groups = group_store.getGroups(user);
         assertEquals(3, groups.size());
 
-        Group group = new Group();
-        group.setId(2);
-        group.setUser(user);
-        group_store.delete(group);
+        Long id = 2L;
+        group_store.deleteById(id);
 
         groups = group_store.getGroups(user);
         assertEquals(2, groups.size());

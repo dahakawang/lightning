@@ -197,9 +197,8 @@ public class UserStoreTest {
         MongoCollection<Document> collection = source.getDatabase().getCollection("user");
         assertEquals(4, collection.count());
 
-        User user = new User();
-        user.setId(2);
-        store.delete(user);
+        Long id = 2L;
+        store.deleteById(id);
         assertEquals(3, collection.count());
 
         Document object = collection

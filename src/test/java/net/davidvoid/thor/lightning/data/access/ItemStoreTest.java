@@ -276,6 +276,16 @@ public class ItemStoreTest {
     }
 
     @Test 
+    public void DeleteItem_GivenValidId_WillDelete() {
+        assertEquals(6, collection.count());
+
+        Long id = 2L;
+        store.deleteById(id);
+        
+        assertEquals(5, collection.count());
+    }
+
+    @Test 
     public void DeleteItem_GivenInvalidItem_WillThrow() {
         try {
             store.delete(null);

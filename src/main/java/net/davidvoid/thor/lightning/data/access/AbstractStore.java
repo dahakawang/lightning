@@ -14,6 +14,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
@@ -33,6 +34,13 @@ public abstract class AbstractStore {
         generateId(entity);
         Document object = toDocument(entity);
         getCollection().insertOne(object);
+    }
+    
+    final public void deleteById(Object id) {
+        isTrue(Entity.is_valid_id(id));
+        
+        Bson query = new BasicDBObject("id", id);
+        getCollection().deleteOne(query);
     }
 
     final public void delete(Entity entity) {
