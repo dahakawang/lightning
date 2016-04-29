@@ -36,6 +36,6 @@ public abstract class Entity {
     }
     
     public static boolean is_valid_id(Object id) {
-        return id != null;
+        return id != null && (id instanceof Long);
     }
 }
