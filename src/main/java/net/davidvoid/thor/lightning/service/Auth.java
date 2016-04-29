@@ -38,7 +38,7 @@ public class Auth {
         return user;
     }
 
-    public User register(String name, String password) {
+    synchronized public User register(String name, String password) {
         User user = retrieve_user();
         if (user != null) throw new DuplicateUserException("the user already registered");
 
