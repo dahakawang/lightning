@@ -16,6 +16,7 @@ public class ThorAuthentication extends AbstractAuthenticationToken {
 
     public ThorAuthentication(String username, Object id) {
         super(defaultRoles());
+        setAuthenticated(true);
         this.username = username;
         this.id = id;
     }
