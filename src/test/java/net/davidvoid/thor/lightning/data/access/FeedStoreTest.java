@@ -3,7 +3,6 @@ package net.davidvoid.thor.lightning.data.access;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
 import net.davidvoid.thor.lightning.config.RootConfig;
 import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.Feed;
-import net.davidvoid.thor.lightning.entity.FeedRelation;
+import net.davidvoid.thor.lightning.entity.Group;
 
 import org.bson.Document;
 import org.junit.After;
@@ -36,9 +35,9 @@ import com.mongodb.client.MongoCollection;
 public class FeedStoreTest {
 
     private String[] FEED_DATA_FIXTURE = {
-            "{'_id': 1, 'id': {'$numberLong': '1'}, 'description': 'a small feed1', 'url': 'www.feed1.com', 'last_update': {'$date': '2016-01-02T00:00:00.000Z'}}",
-            "{'_id': 2, 'id': {'$numberLong': '2'}, 'description': 'a small feed2', 'url': 'www.feed2.com', 'last_update': {'$date': '2016-01-02T00:00:00.000Z'}}",
-            "{'_id': 3, 'id': {'$numberLong': '3'}, 'description': 'a small feed3', 'url': 'www.feed3.com', 'last_update': {'$date': '2016-01-02T00:00:00.000Z'}}",
+            "{'_id': 1, 'id': {'$numberLong': '1'}, 'group_id': {'$numberLong': '1'}, 'name': 'feed1', 'description': 'a small feed1', 'url': 'www.feed1.com', 'last_update': {'$date': '2016-01-02T00:00:00.000Z'}}",
+            "{'_id': 2, 'id': {'$numberLong': '2'}, 'group_id': {'$numberLong': '1'}, 'name': 'feed2', 'description': 'a small feed2', 'url': 'www.feed2.com', 'last_update': {'$date': '2016-01-02T00:00:00.000Z'}}",
+            "{'_id': 3, 'id': {'$numberLong': '3'}, 'group_id': {'$numberLong': '2'}, 'name': 'feed3', 'description': 'a small feed3', 'url': 'www.feed3.com', 'last_update': {'$date': '2016-01-02T00:00:00.000Z'}}",
     };
 
     @Autowired
@@ -65,43 +64,26 @@ public class FeedStoreTest {
 
     @Test
     public void GetFeeds_GivenValidRelation_WillReturnFeeds() throws Exception {
-        List<FeedRelation> relations = new ArrayList<FeedRelation>();
+        Group group = new Group();
+        group.setId(1L);
 
-        FeedRelation relation;
-        relation = new FeedRelation();
-        relation.setId(1);
-        relation.setFeedId(1);
-        relations.add(relation);
-
-        relation = new FeedRelation();
-        relation.setId(2);
-        relation.setFeedId(2);
-        relations.add(relation);
-
-        relation = new FeedRelation();
-        relation.setId(3);
-        relation.setFeedId(3);
-        relations.add(relation);
-
-        List<Feed> feeds = store.getFeeds(relations);
-        assertEquals(3, feeds.size());
+        List<Feed> feeds = store.getFeeds(group);
+        assertEquals(2, feeds.size());
         Collections.sort(feeds, (Feed left, Feed right)->((Long)left.getId()).compareTo((Long)right.getId()));
-        assertEquals(relations.get(0), feeds.get(0).getRelation());
-        assertEquals(relations.get(1), feeds.get(1).getRelation());
-        assertEquals(relations.get(2), feeds.get(2).getRelation());
+        assertEquals(group, feeds.get(0).getGroup());
+        assertEquals(group, feeds.get(1).getGroup());
 
-        relations.clear();
-        relations.add(relation);
-        feeds = store.getFeeds(relations);
+        group.setId(2L);
+        feeds = store.getFeeds(group);
         assertEquals(1, feeds.size());
 
         Feed feed = feeds.get(0);
 
         assertEquals(3L, feed.getId());
+        assertEquals(group, feed.getGroup());
+        assertEquals("feed3", feed.getName());
         assertEquals("a small feed3", feed.getDescription());
         assertEquals("www.feed3.com", feed.getUrl());
-        assertEquals("", feed.getName());
-        assertEquals(relation, feed.getRelation());
         assertNotNull(feed.getLastUpdate());
     }
 
@@ -111,6 +93,7 @@ public class FeedStoreTest {
 
         Date date = new Date();
         Feed feed = new Feed();
+        feed.setName("hehe");
         feed.setDescription("desc");
         feed.setUrl("www.baidu.com");
         feed.setLastUpdate(date);
@@ -119,7 +102,8 @@ public class FeedStoreTest {
 
         assertEquals(1, collection.count());
         Document object = collection.find().first();
-        assertEquals(5, object.keySet().size());
+        assertEquals(6, object.keySet().size());
+        assertEquals("hehe", object.get("name"));
         assertEquals("desc", object.get("description"));
         assertEquals("www.baidu.com", object.get("url"));
         assertEquals(date, object.get("last_update"));

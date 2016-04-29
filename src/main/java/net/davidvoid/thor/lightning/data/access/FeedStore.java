@@ -3,23 +3,21 @@ package net.davidvoid.thor.lightning.data.access;
 import static org.springframework.util.Assert.notNull;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.entity.Feed;
-import net.davidvoid.thor.lightning.entity.FeedRelation;
+import net.davidvoid.thor.lightning.entity.Group;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.stereotype.Component;
 
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 
 /**
  * Created by david on 3/22/16. feed collection:
- * {_id: XX, id: long, description: string, url: string, last_update: Date}
+ * {_id: XX, id: long, group_id: long, name: string, description: string, url: string, last_update: Date}
  * index 1 : id, unique
  */
 @Component
@@ -28,43 +26,24 @@ public class FeedStore extends AbstractStore {
     private static final String COLLECTION_NAME = "feed";
 
     @SuppressWarnings("unchecked")
-    public List<Feed> getFeeds(List<FeedRelation> list) {
-        notNull(list);
+    public List<Feed> getFeeds(Group group) {
+        notNull(group);
 
-        Bson query = get_query(list);
-        return inject_relations((List<Feed>) (List<?>) get(query), list);
+        Bson query = get_query(group);
+        return inject_group((List<Feed>) (List<?>) get(query), group);
     }
 
-    private List<Feed> inject_relations(List<Feed> list, List<FeedRelation> relations) {
-        HashMap<Object, Feed> relation_map = new HashMap<>();
-        for (Feed relation : list) {
-            relation_map.put(relation.getId(), relation);
-        }
-        
-        for (FeedRelation relation : relations) {
-            Long id = relation.getFeedId();
-            Feed feed = relation_map.get(id);
-            if (feed != null) feed.setRelation(relation);
+    private List<Feed> inject_group(List<Feed> list, Group group) {
+        for (Feed feed : list) {
+            feed.setGroup(group);
         }
         return list;
     }
 
-    private Bson get_query(List<FeedRelation> list) {
-        assert list != null;
+    private Bson get_query(Group group) {
+        assert group != null;
 
-        BasicDBList id_list = get_id_list(list);
-        return new BasicDBObject("id", new BasicDBObject("$in", id_list));
-    }
-
-    private BasicDBList get_id_list(List<FeedRelation> list) {
-        BasicDBList id_list = new BasicDBList();
-
-        for (FeedRelation relation : list) {
-            id_list.add(relation.getFeedId());
-            assert relation.has_valid_id() : "the relation used to find feeds must has valid id";
-        }
-
-        return id_list;
+        return new BasicDBObject("group_id", group.getId()); 
     }
 
     @Override
@@ -76,6 +55,7 @@ public class FeedStore extends AbstractStore {
         object.put("description", feed.getDescription());
         object.put("url", feed.getUrl());
         object.put("last_update", feed.getLastUpdate());
+    	object.put("name", feed.getName());
 
         return object;
     }
@@ -89,6 +69,7 @@ public class FeedStore extends AbstractStore {
         feed.setDescription((String) object.get("description"));
         feed.setUrl((String) object.get("url"));
         feed.setLastUpdate((Date) object.get("last_update"));
+		feed.setName((String)object.get("name"));
 
         return feed;
     }

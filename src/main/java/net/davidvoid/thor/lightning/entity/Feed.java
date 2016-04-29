@@ -10,9 +10,16 @@ public class Feed extends Entity {
     private String description = "";
     private String url = "";
     private Date last_update = null;
-    private FeedRelation relation = null;
+    private Group group = null;
 
 
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
     public String getName() {
         return name;
     }
@@ -44,13 +51,4 @@ public class Feed extends Entity {
     public void setLastUpdate(Date last_update) {
         this.last_update = last_update;
     }
-
-    public FeedRelation getRelation() {
-        return relation;
-    }
-
-    public void setRelation(FeedRelation relation) {
-        this.relation = relation;
-    }
-
 }
