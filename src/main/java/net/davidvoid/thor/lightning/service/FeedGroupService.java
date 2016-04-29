@@ -19,7 +19,7 @@ public class FeedGroupService {
     UserStore userStore = null;
     
     public List<Group> getAllGroups() {
-        long uid = SessionUser.get().getId();
+        Object uid = SessionUser.get().getId();
         //return store.getGroups(uid);
         return null;
     }
