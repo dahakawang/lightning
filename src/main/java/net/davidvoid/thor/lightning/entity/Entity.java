@@ -33,9 +33,9 @@ public abstract class Entity {
             this.id = (Long) id;
         } else if (id instanceof Integer) {
             this.id = ((Integer)id).longValue();
+        } else {
+            fail();
         }
-        
-        fail();
     }
 
     public void setInvalidId() {
