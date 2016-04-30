@@ -49,6 +49,14 @@ public class ItemStore extends AbstractStore {
         return inject_feed((List<Item>) (List<?>) get(query, order), feed);
     }
 
+    public long countByFeedId(Object id) {
+        notNull(id);
+        isTrue(Entity.is_valid_id(id));
+
+        BasicDBObject query = new BasicDBObject("feed_id", id);
+        return count(query);
+    }
+
     public long count(Feed feed) {
         notNull(feed);
         isTrue(feed.has_valid_id());

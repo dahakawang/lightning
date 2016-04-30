@@ -1,5 +1,7 @@
 package net.davidvoid.thor.lightning.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 /**
@@ -10,6 +12,7 @@ public class Feed extends Entity {
     private String description = "";
     private String url = "";
     private Date last_update = null;
+    @JsonIgnore
     private Group group = null;
 
 
