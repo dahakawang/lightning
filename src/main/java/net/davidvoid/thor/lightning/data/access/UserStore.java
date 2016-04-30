@@ -32,7 +32,7 @@ public class UserStore extends AbstractStore {
         return (User) getOne(query);
     }
 
-    public User getById(long id) {
+    public User getById(Object id) {
         BasicDBObject query = new BasicDBObject("id", id);
         return (User) getOne(query);
     }
