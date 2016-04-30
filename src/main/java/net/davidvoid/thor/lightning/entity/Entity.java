@@ -32,9 +32,9 @@ public abstract class Entity {
             this.id = (Long) id;
         } else if (id instanceof Integer) {
             this.id = ((Integer)id).longValue();
+        } else {
+            throw new IllegalArgumentException("id should only be Long or Integer");
         }
-
-        throw new IllegalArgumentException("id should only be Long or Integer");
     }
 
     public void setInvalidId() {
