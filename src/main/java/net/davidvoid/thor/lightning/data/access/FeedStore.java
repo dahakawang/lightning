@@ -1,5 +1,6 @@
 package net.davidvoid.thor.lightning.data.access;
 
+import static org.springframework.util.Assert.isTrue;
 import static org.springframework.util.Assert.notNull;
 
 import java.util.Date;
@@ -29,8 +30,45 @@ public class FeedStore extends AbstractStore {
     public List<Feed> getFeeds(Group group) {
         notNull(group);
 
-        Bson query = get_query(group);
+        Bson query = get_query(group.getId());
         return inject_group((List<Feed>) (List<?>) get(query), group);
+    }
+
+    public Feed getFeedByGroupId(Object group_id) {
+        notNull(group_id);
+        isTrue(Entity.is_valid_id(group_id));
+
+        Bson query = get_query(group_id);
+        return (Feed) getOne(query);
+    }
+
+    public Feed getFeedByGroupAndFeedIds(Group group, Object feed_id) {
+        notNull(group.getId());
+        notNull(feed_id);
+        isTrue(group.has_valid_id());
+        isTrue(Entity.is_valid_id(feed_id));
+
+        BasicDBObject query = new BasicDBObject("id", feed_id);
+        query.put("group_id", group.getId());
+        Feed feed = (Feed) getOne(query);
+        feed.setGroup(group);
+        return feed;
+    }
+
+    public Feed getFeedByIds(Object id) {
+        notNull(id);
+        isTrue(Entity.is_valid_id(id));
+
+        Bson query = new BasicDBObject("id", id);
+        return (Feed) getOne(query);
+    }
+
+    public long countFeedsByGroupId(Object group_id) {
+        notNull(group_id);
+        isTrue(Entity.is_valid_id(group_id));
+
+        Bson query = get_query(group_id);
+        return count(query);
     }
 
     private List<Feed> inject_group(List<Feed> list, Group group) {
@@ -40,10 +78,10 @@ public class FeedStore extends AbstractStore {
         return list;
     }
 
-    private Bson get_query(Group group) {
-        assert group != null;
+    private Bson get_query(Object group_id) {
+        assert group_id != null;
 
-        return new BasicDBObject("group_id", group.getId()); 
+        return new BasicDBObject("group_id", group_id);
     }
 
     @Override
@@ -52,6 +90,7 @@ public class FeedStore extends AbstractStore {
 
         Feed feed = (Feed) entity;
         Document object = new Document("id", feed.getId());
+        object.put("group_id", feed.getGroup().getId());
         object.put("description", feed.getDescription());
         object.put("url", feed.getUrl());
         object.put("last_update", feed.getLastUpdate());
