@@ -6,10 +6,15 @@ import static org.springframework.util.Assert.notNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mongodb.bulk.UpdateRequest;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.exception.ResourceNotFoundException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +25,8 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
 
 public abstract class AbstractStore {
+    private static Log logger = LogFactory.getLog(AbstractStore.class);
+
     @Autowired
     private MongoDataSource data_source = null;
 
@@ -40,7 +47,10 @@ public abstract class AbstractStore {
         isTrue(Entity.is_valid_id(id));
         
         Bson query = new BasicDBObject("id", id);
-        getCollection().deleteOne(query);
+        DeleteResult result = getCollection().deleteOne(query);
+
+        if (result.getDeletedCount() == 0) throw new ResourceNotFoundException("no such group");
+        if (result.getDeletedCount() != 1) logger.info("more than one updated");
     }
 
     final public void delete(Entity entity) {
@@ -49,8 +59,11 @@ public abstract class AbstractStore {
                 "the entity to be deleted should have a valid id");
 
         Bson query = getModifyQuery(entity);
-        getCollection().deleteOne(query);
+        DeleteResult result = getCollection().deleteOne(query);
         entity.setInvalidId();
+
+        if (result.getDeletedCount() == 0) throw new ResourceNotFoundException("no such group");
+        if (result.getDeletedCount() != 1) logger.info("more than one updated");
     }
 
     final public void update(Entity entity) {
@@ -62,7 +75,10 @@ public abstract class AbstractStore {
         Document update = toDocument(entity);
         UpdateOptions options = new UpdateOptions();
         options.upsert(false);
-        getCollection().replaceOne(query, update, options);
+        UpdateResult result = getCollection().replaceOne(query, update, options);
+
+        if (result.getMatchedCount() == 0) throw new ResourceNotFoundException("no such group");
+        if (result.getMatchedCount() != 1) logger.info("more than one updated");
     }
 
     final protected long count(Bson query) {
