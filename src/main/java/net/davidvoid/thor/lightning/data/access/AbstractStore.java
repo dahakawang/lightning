@@ -62,7 +62,7 @@ public abstract class AbstractStore {
         DeleteResult result = getCollection().deleteOne(query);
         entity.setInvalidId();
 
-        if (result.getDeletedCount() == 0) throw new ResourceNotFoundException("no such group");
+        if (result.getDeletedCount() == 0) throw new ResourceNotFoundException("no such entity");
         if (result.getDeletedCount() != 1) logger.info("more than one updated");
     }
 
