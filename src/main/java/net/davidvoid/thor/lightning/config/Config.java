@@ -11,7 +11,7 @@ public class Config extends AbstractAnnotationConfigDispatcherServletInitializer
     @Override
     protected WebApplicationContext createRootApplicationContext() {
         WebApplicationContext context = super.createRootApplicationContext();
-        ((ConfigurableEnvironment)context.getEnvironment()).setActiveProfiles("dev-c");
+        ((ConfigurableEnvironment)context.getEnvironment()).setActiveProfiles("dev-h");
         return context;
     }
 
