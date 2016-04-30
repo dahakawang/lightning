@@ -1,6 +1,5 @@
 package net.davidvoid.thor.lightning.entity;
 
-import static org.junit.Assert.fail;
 import static org.springframework.util.Assert.isTrue;
 import static org.springframework.util.Assert.notNull;
 
@@ -33,9 +32,9 @@ public abstract class Entity {
             this.id = (Long) id;
         } else if (id instanceof Integer) {
             this.id = ((Integer)id).longValue();
-        } else {
-            fail();
         }
+
+        throw new IllegalArgumentException("id should only be Long or Integer");
     }
 
     public void setInvalidId() {
