@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class FeedGroupService {
+public class GroupService {
     @Autowired
     GroupStore store = null;
     @Autowired

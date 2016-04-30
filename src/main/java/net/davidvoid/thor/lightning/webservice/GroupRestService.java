@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.davidvoid.thor.lightning.entity.Group;
-import net.davidvoid.thor.lightning.service.FeedGroupService;
+import net.davidvoid.thor.lightning.service.GroupService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ import static net.davidvoid.thor.lightning.util.HttpRequestAssertion.isTrue;
 @RequestMapping("/groups")
 public class GroupRestService {
     @Autowired
-    FeedGroupService service = null;
+    GroupService service = null;
     
     @RequestMapping(method = RequestMethod.GET)
     public List<Group> get() {
