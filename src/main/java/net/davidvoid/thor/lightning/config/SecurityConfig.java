@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers(HttpMethod.PUT, "/users/*/").permitAll()
+                .antMatchers(HttpMethod.PUT, "/users/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/users/*/login", "/users/*/logout").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
