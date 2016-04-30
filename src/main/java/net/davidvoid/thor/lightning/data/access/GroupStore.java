@@ -33,6 +33,14 @@ public class GroupStore extends AbstractStore {
         return inject_user((List<Group>) (List<?>) get(query), user);
     }
 
+    public Group getGroupById(Object id) {
+        notNull(id);
+        isTrue(Entity.is_valid_id(id), "invalid group ID given");
+
+        BasicDBObject query =  new BasicDBObject("id", id);
+        return (Group) getOne(query);
+    }
+
     private List<Group> inject_user(List<Group> list, User user) {
         assert user.has_valid_id() : "user is invalid";
         assert list != null;

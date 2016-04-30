@@ -106,6 +106,15 @@ public class GroupStoreTest {
     }
 
     @Test
+    public void GetGroupById_GivenValidId_WillReturn() {
+        Group group = group_store.getGroupById(1);
+
+        assertEquals("Group1", group.getName());
+        assertEquals(null, group.getUser());
+        assertEquals(1L, group.getId());
+    }
+
+    @Test
     public void GetGroups_GivenInvalidUser_WillThrow() {
         User user = new User();
         user.setName("david");
@@ -123,7 +132,7 @@ public class GroupStoreTest {
         
         User user = user_store.getByName("david");
         Group group = new Group();
-        group.setName("group1");
+        group.setName("Group1");
         group.setUser(user);
         
         group_store.add(group);
@@ -131,7 +140,7 @@ public class GroupStoreTest {
         assertEquals(1, group_col.count());
         Document obj = group_col.find().first();
         assertEquals(user.getId(), obj.get("user_id"));
-        assertEquals("group1", obj.get("name"));
+        assertEquals("Group1", obj.get("name"));
         assertTrue(group.has_valid_id());
     }
 
