@@ -207,7 +207,7 @@ public class UserStoreTest {
     }
 
     @Test
-    public void Delete_byIdSeveralTimes_FirstWillSuccessRemainWillHaveNoEffects() {
+    public void Delete_byIdSeveralTimes_FirstWillSuccessRemainWillThrow() {
         MongoCollection<Document> collection = source.getDatabase().getCollection("user");
         assertEquals(4, collection.count());
 
@@ -217,12 +217,17 @@ public class UserStoreTest {
         assertEquals(3, collection.count());
 
         user.setId(2);
-        store.delete(user);
-        assertEquals(3, collection.count());
+        try {
+            store.delete(user);
+            assertEquals(3, collection.count());
+            fail();
+        } catch (ResourceNotFoundException e) {}
 
-        user.setId(2);
-        store.delete(user);
-        assertEquals(3, collection.count());
+        try {
+            user.setId(2); store.delete(user);
+            assertEquals(3, collection.count());
+            fail();
+        } catch (ResourceNotFoundException e) {}
 
         Document object = collection
                 .find(new BasicDBObject("name", "kevin")).first();
