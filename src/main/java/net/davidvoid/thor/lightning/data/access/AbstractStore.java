@@ -25,6 +25,7 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
 
 public abstract class AbstractStore {
+    //TODO check what to use for log
     private static Log logger = LogFactory.getLog(AbstractStore.class);
 
     @Autowired
@@ -49,7 +50,7 @@ public abstract class AbstractStore {
         Bson query = new BasicDBObject("id", id);
         DeleteResult result = getCollection().deleteOne(query);
 
-        if (result.getDeletedCount() == 0) throw new ResourceNotFoundException("no such group");
+        if (result.getDeletedCount() == 0) throw new ResourceNotFoundException("no such entity");
         if (result.getDeletedCount() != 1) logger.info("more than one updated");
     }
 
