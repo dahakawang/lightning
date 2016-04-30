@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/users")
-public class UserService {
+public class UserRestService {
 
     @Autowired
     Auth auth = null;

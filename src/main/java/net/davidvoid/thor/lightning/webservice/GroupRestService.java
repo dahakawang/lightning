@@ -14,7 +14,7 @@ import static net.davidvoid.thor.lightning.util.HttpRequestAssertion.isTrue;
 
 @RestController
 @RequestMapping("/groups")
-public class GroupService {
+public class GroupRestService {
     @Autowired
     FeedGroupService service = null;
     
