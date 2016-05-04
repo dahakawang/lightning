@@ -50,8 +50,8 @@ public class JwtAuthenticationServiceTest {
         assertTrue((new Date().getTime() - claims.getBody().getIssuedAt().getTime()) < 5000);
     }
 
-    private String load_key(String filename) {
-        ClassLoader loader = this.getClass().getClassLoader();
+    public static String load_key(String filename) {
+        ClassLoader loader = JwtAuthenticationServiceTest.class.getClassLoader();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(loader.getResourceAsStream(filename)))) {
             return reader.readLine();
