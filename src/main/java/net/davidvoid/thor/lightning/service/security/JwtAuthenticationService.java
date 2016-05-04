@@ -6,10 +6,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Date;
 import java.util.Map;
 
@@ -34,19 +31,12 @@ public class JwtAuthenticationService {
     String secretKey = null;
     
     public JwtAuthenticationService() {
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream("config/key.hmac");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        ClassLoader loader = this.getClass().getClassLoader();
 
-        try {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(loader.getResourceAsStream("config/key.hmac")))) {
             secretKey = reader.readLine();
         } catch (IOException e) {
             logger.fatal("unable to read HMAC key");
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException e) {
-                logger.fatal("failed to close file");
-            }
         }
     }
 
