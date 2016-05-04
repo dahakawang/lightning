@@ -75,7 +75,7 @@ public class JwtAuthenticationServiceTest {
         user.setId(1);
 
         String jwtToken = service.getToken(user);
-        Authentication auth = service.authenticate(jwtToken);
+        ThorAuthentication auth = (ThorAuthentication) service.authenticate(jwtToken);
         assertEquals("david", auth.getName());
         assertEquals("david", auth.getPrincipal());
         assertEquals("", auth.getCredentials());
@@ -83,6 +83,7 @@ public class JwtAuthenticationServiceTest {
         GrantedAuthority role = (GrantedAuthority) auth.getAuthorities().toArray()[0];
         assertEquals("USER", role.toString());
         assertEquals(true, auth.isAuthenticated());
+        assertEquals(1, auth.getId());
     }
 
 }
