@@ -91,23 +91,28 @@ public class FeedStoreTest {
     public void Add_Feeds_WillSuccess() throws Exception {
         collection.deleteMany(new Document());
 
+        Group group = new Group();
+        group.setId(12);
+
         Date date = new Date();
         Feed feed = new Feed();
         feed.setName("hehe");
         feed.setDescription("desc");
         feed.setUrl("www.baidu.com");
         feed.setLastUpdate(date);
+        feed.setGroup(group);
 
         store.add(feed);
 
         assertEquals(1, collection.count());
         Document object = collection.find().first();
-        assertEquals(6, object.keySet().size());
+        assertEquals(7, object.keySet().size());
         assertEquals("hehe", object.get("name"));
         assertEquals("desc", object.get("description"));
         assertEquals("www.baidu.com", object.get("url"));
         assertEquals(date, object.get("last_update"));
         assertNotNull(object.get("id"));
+        assertEquals(12L, object.get("group_id"));
     }
 
     @Test
@@ -122,8 +127,11 @@ public class FeedStoreTest {
 
     @Test
     public void Update_ValidFeed_WillSuccess() throws Exception {
+        Group group = new Group();
+        group.setId(1);
+        Feed feed = store.getFeedByGroupAndFeedIds(group, 1);
+
         Date date = new Date();
-        Feed feed = new Feed();
         feed.setId(1);
         feed.setLastUpdate(date);
 
@@ -132,9 +140,11 @@ public class FeedStoreTest {
         assertEquals(3, collection.count());
 
         Document object = collection.find(new BasicDBObject("id", 1L)).first();
-        assertEquals("", object.get("description"));
-        assertEquals("", object.get("url"));
+        assertEquals("feed1", object.get("name"));
+        assertEquals("a small feed1", object.get("description"));
+        assertEquals("www.feed1.com", object.get("url"));
         assertEquals(date, object.get("last_update"));
         assertEquals(1L, object.get("id"));
+        assertEquals(1L, object.get("group_id"));
     }
 }
