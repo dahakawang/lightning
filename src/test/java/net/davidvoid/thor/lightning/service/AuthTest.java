@@ -4,6 +4,9 @@ import net.davidvoid.thor.lightning.config.RootConfig;
 import net.davidvoid.thor.lightning.data.access.UserStore;
 import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.User;
+import net.davidvoid.thor.lightning.exception.AuthenticationException;
+import net.davidvoid.thor.lightning.exception.DuplicateUserException;
+import net.davidvoid.thor.lightning.exception.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -39,32 +43,103 @@ public class AuthTest {
 
         User user = new User();
         user.setName("david");
-        user.setPassword("123");
+        user.setPassword(shaDigest("123"));
         store.add(user);
     }
-
 
     @Test
     public void authenticate_WhenHasUserAndPasswordRight_WillSuccess() throws Exception {
         User user = auth.authenticate("david", "123");
         assertNotNull(user);
         assertEquals("david", user.getName());
-        assertEquals("123", shaDigest(user.getPassword()));
+        assertEquals(shaDigest("123"), user.getPassword());
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void authenticate_WhenNoUser_WillThrow() throws Exception {
+        source.getDatabase().drop();
 
+        try {
+            auth.authenticate("david", "123");
+            fail();
+        } catch (AuthenticationException e) {}
     }
 
     @Test
-    public void testRegister() throws Exception {
-
+    public void authenticate_WhenWrongPassword_WillThrow() throws Exception {
+        try {
+            auth.authenticate("david", "1234");
+            fail();
+        } catch (AuthenticationException e) {}
     }
 
     @Test
-    public void testGetUser() throws Exception {
+    public void update_givenValidUser_willUpdate() throws Exception {
+        auth.update("david", "aabbab");
+        User user = store.getUser();
+        assertEquals("david", user.getName());
+        assertEquals(shaDigest("aabbab"), user.getPassword());
+    }
 
+    @Test
+    public void update_WhenNoUser_willThrow() throws Exception {
+        source.getDatabase().drop();;
+
+        try {
+            auth.update("david", "aabbab");
+            fail();
+        } catch (ResourceNotFoundException e) {}
+    }
+
+    @Test
+    public void update_WhenTryToUpdateName_willThrow() throws Exception {
+        try {
+            auth.update("kevin", "aabbab");
+            fail();
+        } catch (ResourceNotFoundException e) {}
+    }
+
+    @Test
+    public void register_givenValidUser_willAdd() throws Exception {
+        source.getDatabase().drop();
+
+        auth.register("david", "123");
+        User user = store.getUser();
+        assertEquals("david", user.getName());
+        assertEquals(shaDigest("123"), user.getPassword());
+    }
+
+    @Test
+    public void register_WhenAlreadyHasUser_WillThrow() throws Exception {
+        try {
+            auth.register("david", "123");
+            fail();
+        } catch (DuplicateUserException e) {}
+    }
+
+    @Test
+    public void getUser_WhenHasUser_WillReturnUser() throws Exception {
+        User user = auth.getUser("david");
+        assertEquals("david", user.getName());
+        assertEquals(shaDigest("123"), user.getPassword());
+    }
+
+    @Test
+    public void getUser_WhenUseNonexistUser_WillReturnUser() throws Exception {
+        try {
+            auth.getUser("ken");
+            fail();
+        } catch (ResourceNotFoundException e) {}
+    }
+
+    @Test
+    public void getUser_WhenUserNotExistAtAll_WillReturnUser() throws Exception {
+        source.getDatabase().drop();
+
+        try {
+            auth.getUser("ken");
+            fail();
+        } catch (ResourceNotFoundException e) {}
     }
 
     private String shaDigest(String password) {
