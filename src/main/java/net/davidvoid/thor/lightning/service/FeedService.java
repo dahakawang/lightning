@@ -57,7 +57,7 @@ public class FeedService {
         return original_feed;
     }
 
-    public void delete(Long group_id, Long id) {
+    public void delete(Object group_id, Object id) {
         // The items under this feed will be deleted by the background worker
         Group group = group_store.getGroupById(group_id);
         Feed original_feed = feed_store.getFeedByGroupAndFeedIds(group, id);
