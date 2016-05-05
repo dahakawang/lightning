@@ -72,10 +72,8 @@ public class Auth {
         try {
             User user = store.getUser();
             return user;
-        } catch (ResourceNotFoundException e) {
-        }
-        
-        assert false : "should never reach here";
+        } catch (ResourceNotFoundException e) {}
+
         return null;
     }
 }
