@@ -50,6 +50,7 @@ public class FeedStoreTest {
 
     @Before
     public void setUp() throws Exception {
+        source.getDatabase().drop();
         collection = source.getDatabase().getCollection("feed");
 
         for (String json : FEED_DATA_FIXTURE) {

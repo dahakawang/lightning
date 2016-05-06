@@ -51,6 +51,7 @@ public class ItemStoreTest {
 
     @Before
     public void setUp() throws Exception {
+        source.getDatabase().drop();
         collection = source.getDatabase().getCollection("item");
 
         for (String json : DATA_FIXTURE) {

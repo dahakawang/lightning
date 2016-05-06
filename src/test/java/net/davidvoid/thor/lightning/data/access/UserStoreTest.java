@@ -45,6 +45,7 @@ public class UserStoreTest {
 
     @Before
     public void setUp() throws Exception {
+        source.getDatabase().drop();
         MongoCollection<Document> collection = source.getDatabase().getCollection("user");
 
         for (String json : DATA_FIXTURE) {

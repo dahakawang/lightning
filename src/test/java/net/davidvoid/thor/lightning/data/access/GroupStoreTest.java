@@ -57,6 +57,7 @@ public class GroupStoreTest {
 
     @Before
     public void setUp() throws Exception {
+        source.getDatabase().drop();
         user_col = source.getDatabase().getCollection("user");
         group_col = source.getDatabase().getCollection("group");
 
