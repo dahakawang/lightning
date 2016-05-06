@@ -6,9 +6,6 @@ import static org.springframework.util.Assert.notNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mongodb.bulk.UpdateRequest;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
 import net.davidvoid.thor.lightning.data.source.MongoDataSource;
 import net.davidvoid.thor.lightning.entity.Entity;
 import net.davidvoid.thor.lightning.exception.ResourceNotFoundException;
@@ -23,6 +20,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 
 public abstract class AbstractStore {
     //TODO check what to use for log
