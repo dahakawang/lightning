@@ -1,6 +1,13 @@
 package net.davidvoid.thor.lightning.service;
 
-import ch.qos.logback.core.recovery.ResilientOutputStreamBase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.util.Date;
+import java.util.List;
+
 import net.davidvoid.thor.lightning.config.RootConfig;
 import net.davidvoid.thor.lightning.data.access.FeedStore;
 import net.davidvoid.thor.lightning.data.access.GroupStore;
@@ -11,6 +18,7 @@ import net.davidvoid.thor.lightning.entity.Group;
 import net.davidvoid.thor.lightning.entity.User;
 import net.davidvoid.thor.lightning.exception.ResourceNotFoundException;
 import net.davidvoid.thor.lightning.service.security.ThorAuthentication;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,11 +27,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.Date;
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by david on 5/5/16.
@@ -105,7 +108,7 @@ public class FeedServiceTest {
     @Test
     public void get_WhenParentGroupNonExist_WillThrow() {
         try {
-            List<Feed> feeds = service.getFeeds(128);
+            service.getFeeds(128);
             fail();
         } catch (ResourceNotFoundException e) {}
     }

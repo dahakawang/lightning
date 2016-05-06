@@ -1,5 +1,11 @@
 package net.davidvoid.thor.lightning.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.util.List;
+
 import net.davidvoid.thor.lightning.config.RootConfig;
 import net.davidvoid.thor.lightning.data.access.GroupStore;
 import net.davidvoid.thor.lightning.data.access.UserStore;
@@ -8,6 +14,7 @@ import net.davidvoid.thor.lightning.entity.Group;
 import net.davidvoid.thor.lightning.entity.User;
 import net.davidvoid.thor.lightning.exception.ResourceNotFoundException;
 import net.davidvoid.thor.lightning.service.security.ThorAuthentication;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,11 +23,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import javax.annotation.Resource;
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by david on 5/5/16.

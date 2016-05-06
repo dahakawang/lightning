@@ -3,10 +3,15 @@ package net.davidvoid.thor.lightning.service.security;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Date;
+
 import net.davidvoid.thor.lightning.config.RootConfig;
 import net.davidvoid.thor.lightning.entity.User;
 import net.davidvoid.thor.lightning.exception.AuthenticationException;
@@ -14,16 +19,10 @@ import net.davidvoid.thor.lightning.exception.AuthenticationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Date;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
